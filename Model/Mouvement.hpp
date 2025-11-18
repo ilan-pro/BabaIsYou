@@ -19,6 +19,7 @@ public:
 
     void deplacer(Agent &a, Direction d);
     void checkCollision(Board &b);
+    pair<int, int> getCoordDirection(Direction d);
 
     ~Mouvement();
 };
