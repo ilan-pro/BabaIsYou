@@ -13,12 +13,11 @@ class Agent
 private:
     string const name;
     bool etat;
-    
-protected:
 
+protected:
     /*
-        ici on ne creer surtout pas de case avec new (pas de composition)  
-        Donc cela implique que dans le destructeur il ne faut surtout pas faire de delete Case 
+        ici on ne creer surtout pas de case avec new (pas de composition)
+        Donc cela implique que dans le destructeur il ne faut surtout pas faire de delete Case
     */
 
     Case *caseActuelle; // ici un pointeur car un agent ne possede pas une Case elle existe a l'exterieur (on veut pas de composition)
@@ -30,7 +29,7 @@ public:
     Case *getCaseActuelle() const;
     void setCaseActuelle(Case *nouvelleCase);
     virtual bool getEtat() const;
-    ~Agent();
+    virtual ~Agent();
 };
 
 #endif

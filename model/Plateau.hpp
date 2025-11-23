@@ -25,13 +25,15 @@ public:
     /* Voir quoi faire pour les copies de vecteurs */
     Plateau(int largeur, int longueur);
     ~Plateau();
-    int getLargeur();
-    int getLongueur();
+    int getLargeur()const;
+    int getLongueur() const;
     /**
       * Ici le getter ne peut être constant car quand nous l'appelons nous sommes dans des fonctions susceptibles de 
       * modifier l'état interne d'une case (i.e la liste des agents de la case)
       */
     Case* getCase(int i, int j);
+    /** celui pour la vue */
+    const Case* getCase(int i, int j) const;
     /**
      * On à cases en constant et on veut un singleton du Plateau, on ne veut donc pas pouvoir réattribuer le Plateau
      * ni le copier

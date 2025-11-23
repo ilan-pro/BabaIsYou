@@ -2,13 +2,15 @@
 #define _LAPIN
 
 #include <string>
+#include "Agent.hpp"
 
 using namespace std;
 
-class Lapin {
+class Lapin : public Agent
+{
 private:
 public:
-    Lapin(/* args */);
+    Lapin(Case *caseInitiale);
     string getName() const;
     bool getEtat() const;
 

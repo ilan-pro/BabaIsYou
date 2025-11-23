@@ -1,7 +1,10 @@
 #include "Controller.hpp"
 
 
-void Controller::gestionEvenement(const sf::Event& e) {
+
+Controller::Controller(Jeu &jeu) : jeu{jeu} {}
+
+void Controller::gestionEvenement(const sf::Event &e) {
     if (e.type == sf::Event::KeyPressed) {
         Direction dir;
         bool pressed = true;

@@ -33,28 +33,31 @@ using namespace sf;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Test MVC");
+    cout<< "ahhh" << endl;
+     sf::RenderWindow window(sf::VideoMode(800, 600), "Test MVC");
 
-    Jeu jeu;                    // modèle
-    Controller controller(jeu); // contrôleur
-    Vue vue(window, jeu);       // vue
+    // // Jeu jeu;                    // modèle
+    // // Controller controller(jeu); // contrôleur
+    // // Vue vue(window, jeu);       // vue
 
     sf::Event event;
 
     while (window.isOpen())
     {
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
+    //     while (window.pollEvent(event))
+    //     {
+    //         if (event.type == sf::Event::Closed)
+    //             window.close();
 
-            controller.gestionEvenement(event);
-        }
+    //        // controller.gestionEvenement(event);
+    //     }
 
-        // éventuellement jeu.update(); si tu simules les animaux
+    //     // éventuellement jeu.update(); si tu simules les animaux
 
-        vue.afficher();
+    //    // vue.afficher();
+        window.clear();
     }
 
-    return 0;
+
+    return EXIT_SUCCESS;
 }
