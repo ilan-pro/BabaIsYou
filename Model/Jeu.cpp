@@ -1,7 +1,8 @@
 #include "Jeu.hpp"
 
-Jeu::Jeu(Board& board) : board{board} {}
+Jeu::Jeu(Plateau &board) : plateau{board} {}
 
-Jeu::~Jeu() {
+Jeu::~Jeu()
+{
     // cout << "destruction de Jeu" << endl;
 }

@@ -1,15 +1,26 @@
 #ifndef _JEU
 #define _JEU
+#include <vector>
+#include "Plateau.hpp"
+using namespace std;
 
-#include "Board.hpp"
+class Jeu
+{
+private:
+    /*
+    ici on souhaite une composition donc si on avait Plateau &plateau , on devait initialiser le plateau a l'exterieur de Jeu ce qui est problématique
 
-class Jeu {
-    private:
-        Board& board;
+    */
+    Plateau plateau;
 
-    public:
-        Jeu(Board& board);
-        ~Jeu();
+    /*
+    Attention ici ne pas oublié de delete dans le destructeur de Jeu sinon fuite de mémoire
+    */
+    vector<Agent *> agents;
+
+public:
+    Jeu(Plateau &plateau);
+    ~Jeu();
 };
 
 #endif
