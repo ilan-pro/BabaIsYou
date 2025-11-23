@@ -1,10 +1,11 @@
 #include "Case.hpp"
+#include "Agent.hpp"
 
 #include <iostream>
 
 using namespace std;
 
-Case::Case(vector<Agent *> agents) : agents{agents} {}
+Case::Case(int x, int y) : x{x}, y{y}, agents() {}
 
 Case::~Case()
 {
@@ -37,7 +38,39 @@ void Case::retirerAgent(Agent *a)
     }
 }
 
+int Case::getX() const {    
+    return x;
+}
+
+int Case::getY() const {
+    return y;
+}
+
 const vector<Agent *> &Case::getAgents() const
 {
     return agents;
+}
+
+void Case::afficherAgents() const
+{
+    if (agents.size() == 0)
+    {
+        cout << "vide";
+    }
+    else
+    {
+        for (size_t i = 0; i < agents.size(); i++)
+        {
+            // ici on à include le header de agent donc on peut
+            cout << '[' << agents.at(i)->getName() << ']';
+        }
+    }
+}
+
+
+ostream& operator<<(ostream& out , const Case& c) {
+    for(size_t i=0; i<c.agents.size(); i++) {
+        out << '[' << c.agents.at(i) << ']';
+    }
+    return out;
 }

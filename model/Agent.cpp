@@ -1,7 +1,6 @@
 #include "Agent.hpp"
 
-Agent::Agent(string const name, bool état, Case *caseActuelle)
-    : name(name), état(état), caseActuelle(caseActuelle)
+Agent::Agent(string const name, bool etat, Case *caseActuelle) : name(name), etat(etat), caseActuelle(caseActuelle)
 {
 }
 
@@ -22,7 +21,7 @@ void Agent::setCaseActuelle(Case *nouvelleCase)
 
 bool Agent::getEtat() const
 {
-    return état;
+    return etat;
 }
 
 Agent::~Agent()
