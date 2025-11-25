@@ -5,11 +5,11 @@
 
 using namespace std;
 
-Case::Case(int x, int y) : x{x}, y{y}, agents() {}
+Case::Case(int x, int y) : agents{}, x{x}, y{y} {}
 
 Case::~Case()
 {
-    cout << "destruction de la Case" << endl;
+    // cout << "destruction de la Case" << endl;
 }
 
 void Case::ajouterAgent(Agent *a)
@@ -38,12 +38,19 @@ void Case::retirerAgent(Agent *a)
     }
 }
 
-int Case::getX() const {    
+int Case::getX() const
+{
     return x;
 }
 
-int Case::getY() const {
+int Case::getY() const
+{
     return y;
+}
+
+vector<Agent *> &Case::getAgents()
+{
+    return agents;
 }
 
 const vector<Agent *> &Case::getAgents() const
@@ -67,9 +74,10 @@ void Case::afficherAgents() const
     }
 }
 
-
-ostream& operator<<(ostream& out , const Case& c) {
-    for(size_t i=0; i<c.agents.size(); i++) {
+ostream &operator<<(ostream &out, const Case &c)
+{
+    for (size_t i = 0; i < c.agents.size(); i++)
+    {
         out << '[' << c.agents.at(i) << ']';
     }
     return out;

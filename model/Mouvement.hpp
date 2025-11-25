@@ -7,8 +7,6 @@
 
 using namespace std;
 
-
-
 /*
 On remarque qu'ici on a pas besoin d'instance de Mouvement donc c'est une classe stateless elle n'a pas d'attribut et possède des méthodes statiques
 */
@@ -23,7 +21,6 @@ public:
      */
     Mouvement();
 
-    
     static pair<int, int> directionToPair(Direction d);
 
     ~Mouvement();

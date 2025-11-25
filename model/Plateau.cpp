@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Plateau::Plateau(int largeur, int longueur) : largeur{largeur}, longueur{longueur}, cases(longueur)
+Plateau::Plateau(int largeur, int longueur) : Largeur{largeur}, Longueur{longueur}, cases(Longueur)
 {
     // cases.reserve(longueur);
     for (int i = 0; i < longueur; i++)
@@ -18,7 +18,7 @@ Plateau::Plateau(int largeur, int longueur) : largeur{largeur}, longueur{longueu
 
 Case *Plateau::getCase(int i, int j)
 {
-    if (i < 0 || i >= longueur || j < 0 || j >= largeur)
+    if (i < 0 || i >= Longueur || j < 0 || j >= Largeur)
     {
         return nullptr;
     }
@@ -27,7 +27,7 @@ Case *Plateau::getCase(int i, int j)
 
 const Case *Plateau::getCase(int i, int j) const
 {
-    if (i < 0 || i >= longueur || j < 0 || j >= largeur)
+    if (i < 0 || i >= Longueur || j < 0 || j >= Largeur)
     {
         return nullptr;
     }
@@ -41,9 +41,9 @@ Plateau::~Plateau()
 
 void Plateau::affichePlateau() const
 {
-    for (int i = 0; i < longueur; i++)
+    for (int i = 0; i < Longueur; i++)
     {
-        for (int j = 0; j < largeur; j++)
+        for (int j = 0; j < Largeur; j++)
         {
             cout << '[' << i << ']' << '[' << j << ']' << " liste d'agents : " << cases[i][j] << endl;
         }
@@ -52,10 +52,10 @@ void Plateau::affichePlateau() const
 
 int Plateau::getLongueur() const
 {
-    return longueur;
+    return Longueur;
 }
 
 int Plateau::getLargeur() const
 {
-    return largeur;
+    return Largeur;
 }

@@ -6,9 +6,8 @@ class Rocher : public Agent
 {
 private:
 public:
-    Rocher(/* args */);
+    Rocher(bool pousse, bool gagne, bool stop, bool baba, Case *caseInitiale);
     string getName() const;
-    bool getEtat() const;
 
     ~Rocher();
 };

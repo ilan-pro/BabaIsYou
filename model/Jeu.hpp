@@ -20,16 +20,16 @@ private:
      */
     vector<Agent *> agents;
 
-    
+    vector<Agent *> joueur;
 
 public:
     Jeu();
 
     void ajouterAgent(Agent *a);
+    bool deplaceRec(pair<int, int> nv_direction, Case *c);
     void deplace(Direction d);
 
-    const Plateau& getPlateau() const; 
-    
+    const Plateau &getPlateau() const;
 
     ~Jeu();
 };

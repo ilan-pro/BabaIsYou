@@ -1,13 +1,64 @@
 #include "Jeu.hpp"
 #include "Lapin.hpp"
+#include "Rocher.hpp"
+#include "Mur.hpp"
+#include "Eau.hpp"
 
-Jeu::Jeu() : plateau(0, 0)
+Jeu::Jeu() : plateau(23, 23)
 {
-    // Lapin *l = new Lapin(plateau.getCase(0, 0));
-    // Case *c = plateau.getCase(0, 0);
-    // c->ajouterAgent(l);
-    // agents.push_back(l);
+    Lapin *l = new Lapin(false, false, false, true, plateau.getCase(0, 0));
+    Case *c = plateau.getCase(0, 0);
+    c->ajouterAgent(l);
+    agents.push_back(l);
+    joueur.push_back(l);
+
+    Rocher *r = new Rocher(true, false, false, false, plateau.getCase(0, 1));
+    Case *c1 = plateau.getCase(0, 1);
+    c1->ajouterAgent(r);
+    agents.push_back(r);
+    Rocher *r2 = new Rocher(true, false, false, false, plateau.getCase(1, 1));
+    Case *c2 = plateau.getCase(0, 2);
+    c2->ajouterAgent(r2);
+    agents.push_back(r2);
+
+    Mur *m = new Mur(false, false, true, false, plateau.getCase(0, 7));
+
+    Case *c3 = plateau.getCase(0, 7);
+    c3->ajouterAgent(m);
+    agents.push_back(m);
+
+    Eau *e = new Eau(false, false, false, false, plateau.getCase(1, 5));
+
+    Case *c4 = plateau.getCase(1, 5);
+    c4->ajouterAgent(e);
+    agents.push_back(e);
+
+    // Lapin *m1 = new Lapin(plateau.getCase(0, 0), );
+    // Lapin *m2 = new Lapin(plateau.getCase(20, 0));
+    // Lapin *m3 = new Lapin(plateau.getCase(0, 20));
+    // Lapin *m4 = new Lapin(plateau.getCase(21, 21));
+
+    // Case *c1 = plateau.getCase(0, 0);
+    // Case *c2 = plateau.getCase(20, 0);
+    // Case *c3 = plateau.getCase(0, 20);
+    // Case *c4 = plateau.getCase(21, 21);
+
+    // c1->ajouterAgent(m1);
+    // c2->ajouterAgent(m2);
+    // c3->ajouterAgent(m3);
+    // c4->ajouterAgent(m4);
+
+    // agents.push_back(m1);
+    // agents.push_back(m2);
+    // agents.push_back(m3);
+    // agents.push_back(m4);
+
+    // joueur.push_back(m1);
+    // joueur.push_back(m2);
+    // joueur.push_back(m3);
+    // joueur.push_back(m4);
 }
+
 Jeu::~Jeu()
 {
     // destruction propre des agents
@@ -20,20 +71,86 @@ void Jeu::ajouterAgent(Agent *a)
     agents.push_back(a);
 }
 
+/**
+On appelle recursivement sur tous les agents en direction de nv_direct et si un retourne false alors nous ne pouvons pas faire le déplacement
+car il y aura un obstacle (ou fin de map) et si c'est vrai alors nous bougeons tous les agents poussable dans la liste
+des cases sur le chemin */
+bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c)
+{
+    // au cas ou mais impossible normalement car un joueur à toujours une case mais sécurité
+    if (c != nullptr)
+    {
+        // check les booléans de ses agents sur la case
+        // si ok appeler sur case cible
+        // sinon false arret recursion;
+        Case *cible = plateau.getCase(c->getX() + nv_direction.first, c->getY() + nv_direction.second);
+        for (size_t i = 0; i < c->getAgents().size(); i++)
+        {
+            Agent *a = c->getAgents().at(i);
+            /* si le prochain n'est pas poussable ou si nous sommes arrivés aux limites */
+            if (a->getStop() || (cible == nullptr))
+            {
+                return false;
+            }
+        }
+        if (cible != nullptr)
+        {
+            if (cible->getAgents().empty())
+            {
+                for (size_t i = 0; i < c->getAgents().size(); i++)
+                {
+                    // on déplace
+                    Agent *a = c->getAgents().at(i);
+                    if (a->getPousse() || a->getBaba())
+                    {
+                        a->setCaseActuelle(cible);
+                        c->retirerAgent(a);
+                        cible->ajouterAgent(a);
+                    }
+                }
+                return true;
+            }
+            bool res = deplaceRec(nv_direction, cible);
+            if (res)
+            {
+                for (size_t i = 0; i < c->getAgents().size(); i++)
+                {
+                    // on déplace
+                    Agent *a = c->getAgents().at(i);
+                    if (a->getPousse() || a->getBaba())
+                    {
+                        a->setCaseActuelle(cible);
+                        c->retirerAgent(a);
+                        cible->ajouterAgent(a);
+                    }
+                }
+                return true; // on avait un petit probleme mais réglé ici en effet il faut retourner true seulement si res ==true sinon false
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            // nous sommes arrivé aux bornes
+            return false;
+        }
+    }
+    // il n'est pas poussable
+    return false;
+}
+
 void Jeu::deplace(Direction d)
 {
-    Agent &a = *(agents.at(0));
-    Case *courant = a.getCaseActuelle();
-    pair<int, int> next_direction = directionToPair(d);
-    Case *cible = plateau.getCase(courant->getX() + next_direction.first, courant->getY() + next_direction.second);
-    if (cible != nullptr)
+
+    for (size_t i = 0; i < joueur.size(); i++)
     {
-        a.setCaseActuelle(cible);
-        courant->retirerAgent(&a);
-        cible->ajouterAgent(&a);
+        Agent &a = *(agents.at(i));
+        Case *courant = a.getCaseActuelle();
+        pair<int, int> nv_direction = directionToPair(d);
+        deplaceRec(nv_direction, courant);
     }
-    cout << "ancienne case: (" << courant->getX() << "," << courant->getY() << ")" << endl;
-    cout << "nouvelle case: (" << cible->getX() << "," << cible->getY() << ")" << endl;
 }
 
 const Plateau &Jeu::getPlateau() const

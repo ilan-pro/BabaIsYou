@@ -9,7 +9,7 @@ using namespace std;
 class Plateau
 {
 private:
-    const int largeur, longueur;
+    const int Largeur, Longueur;
     /**
      * on veut pouvoir changer l'état des cases mais pas le nombre (unique par niveau)
      * ATTENTION

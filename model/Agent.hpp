@@ -12,7 +12,12 @@ class Agent
 {
 private:
     string const name;
-    bool etat;
+
+protected:
+    bool pousse;
+    bool gagne;
+    bool stop;
+    bool baba;
 
 protected:
     /*
@@ -24,12 +29,20 @@ protected:
                         // en protected car seul les classes dérievées doivent pouvoir y accéder
 
 public:
-    Agent(string const name, bool etat, Case *caseActuelle);
+    Agent(string const name, bool pouuse, bool gagne, bool stop, bool baba, Case *caseActuelle);
     virtual string getName() const;
     Case *getCaseActuelle() const;
     void setCaseActuelle(Case *nouvelleCase);
-    virtual bool getEtat() const;
     virtual ~Agent();
+    void setPousse(bool valeur);
+    void setGagne(bool valeur);
+    void setStop(bool valeur);
+    void setBaba(bool valeur);
+
+    bool getPousse() const;
+    bool getGagne() const;
+    bool getStop() const;
+    bool getBaba() const;
 };
 
 #endif
