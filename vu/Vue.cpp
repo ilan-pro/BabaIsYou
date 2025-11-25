@@ -13,10 +13,10 @@ Vue::Vue(sf::RenderWindow &win, Jeu &j)
 
 void Vue::chargerTextures()
 {
-    textureLapin.loadFromFile("./ressource/lap.png");
-    textureMur.loadFromFile("./ressource/mur.png");
-    textureRocher.loadFromFile("./ressource/rocher.png");
-    textureEau.loadFromFile("./ressource/water.png");
+    textureLapin.loadFromFile("./ressource/rabbit.png");
+    textureMur.loadFromFile("./ressource/blanc.png");
+    textureRocher.loadFromFile("./ressource/roche.png");
+    textureEau.loadFromFile("./ressource/waves.png");
 }
 
 void Vue::afficher()
@@ -41,7 +41,13 @@ void Vue::afficher()
                 else if (dynamic_cast<Eau *>(a))
                     sprite.setTexture(textureEau);
 
-                sprite.setScale(sf::Vector2f(0.1, 0.1));
+                // sprite.setScale(sf::Vector2f(0.1, 0.1));
+
+                // sprite.setPosition(j * 32, i * 32);
+
+                float targetSize = 32.0f;
+                sf::Vector2u size = sprite.getTexture()->getSize();
+                sprite.setScale(targetSize / size.x, targetSize / size.y);
                 /* ICI les sprite utilise les vraies coordonnées trigo avec x : colonne et y : ligne (inverse de nous) */
                 sprite.setPosition(j * 32, i * 32); // taille case = 32px
                 window.draw(sprite);
