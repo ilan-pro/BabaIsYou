@@ -38,6 +38,8 @@ public:
     void setGagne(bool valeur);
     void setStop(bool valeur);
     void setBaba(bool valeur);
+    /*tous les booléans à faux SAUF pour le baba car nous pouvons aller sur un baba*/
+    bool toutFaux() const;
 
     bool getPousse() const;
     bool getGagne() const;

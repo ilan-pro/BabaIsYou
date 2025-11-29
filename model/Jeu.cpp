@@ -90,18 +90,40 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
         // si ok appeler sur case cible
         // sinon false arret recursion;
         Case *cible = plateau.getCase(c->getX() + nv_direction.first, c->getY() + nv_direction.second);
+
         for (size_t i = 0; i < c->getAgents().size(); i++)
         {
             Agent *a = c->getAgents().at(i);
-            /* si le prochain n'est pas poussable ou si nous sommes arrivés aux limites */
-            if (a->getStop() || (cible == nullptr))
+            /*si dans notre case actuelle ou les suivantes il y a un élément pas poussable*/
+            if (a->getStop())
             {
                 return false;
             }
         }
+        
         if (cible != nullptr)
         {
-            if (cible->getAgents().empty() || cible->containBaba())
+            /*si la cible est vide ou contient uniquement des baba*/
+            /*nos cas d'arrêts*/
+            if (cible->getAgents().empty() || /*cible->containBaba_only() ||*/ cible->ToutSuperposable())
+            {
+                for (size_t i = 0; i < c->getAgents().size(); i++)
+                {
+                    // on déplace
+                    Agent *a = c->getAgents().at(i);
+                    /*si c'est poussable ou que c'est notre agent qu'on doit déplacer*/
+                    /*TODO: est-ce que getBaba est vraiment utile ? si a==agent alors c'est forcément un baba ?*/
+                    if (a->getPousse() || (a->getBaba() && a == agentjoueur))
+                    {
+                        a->setCaseActuelle(cible);
+                        c->retirerAgent(a);
+                        cible->ajouterAgent(a);
+                    }
+                }
+                return true;
+            }
+            bool res = deplaceRec(nv_direction, cible, agentjoueur);
+            if (res)
             {
                 for (size_t i = 0; i < c->getAgents().size(); i++)
                 {
@@ -114,24 +136,7 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
                         cible->ajouterAgent(a);
                     }
                 }
-                return true;
-            }
-            bool res = deplaceRec(nv_direction, cible,agentjoueur);
-            if (res)
-            {
-                for (size_t i = 0; i < c->getAgents().size(); i++)
-                {
-                    // on déplace
-                    Agent *a = c->getAgents().at(i);
-                    if (a->getPousse() || a->getBaba())
-                    {
-                        cout << "iiiiiiii" << endl;
-                        a->setCaseActuelle(cible);
-                        c->retirerAgent(a);
-                        cible->ajouterAgent(a);
-                    }
-                }
-                return true; // on avait un petit probleme mais réglé ici en effet il faut retourner true seulement si res ==true sinon false
+                return true; // on avait un petit probleme mais réglé ici en effet il faut retourner true seulement si res == true sinon false
             }
             else
             {
@@ -153,7 +158,6 @@ void Jeu::deplace(Direction d)
 
     for (size_t i = 0; i < joueur.size(); i++)
     {
-
         Agent &a = *(agents.at(i));
         Case *courant = a.getCaseActuelle();
         pair<int, int> nv_direction = directionToPair(d);

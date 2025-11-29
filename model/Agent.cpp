@@ -63,3 +63,10 @@ Agent::~Agent()
 {
     cout << "destruction de l'agent de nom :" << name << endl;
 }
+
+bool Agent::toutFaux() const {
+    if(!(pousse || gagne || stop)){
+        return true;
+    }
+    return false;
+}

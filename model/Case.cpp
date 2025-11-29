@@ -12,13 +12,22 @@ Case::~Case()
     // cout << "destruction de la Case" << endl;
 }
 
-bool Case::containBaba() const {
+// bool Case::containBaba_only() const {
+//     for(size_t i=0; i<agents.size(); i++) {
+//         if(!(agents.at(i)->getBaba())) {
+//             return false;
+//         }
+//     }
+//     return true;
+// }
+
+bool Case::ToutSuperposable() const {
     for(size_t i=0; i<agents.size(); i++) {
-        if(agents.at(i)->getBaba()) {
-            return true;
+        if(!(agents.at(i)->toutFaux())) {
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
 void Case::ajouterAgent(Agent *a)
