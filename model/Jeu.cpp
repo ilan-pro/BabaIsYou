@@ -81,7 +81,7 @@ void Jeu::ajouterAgent(Agent *a)
 On appelle recursivement sur tous les agents en direction de nv_direct et si un retourne false alors nous ne pouvons pas faire le déplacement
 car il y aura un obstacle (ou fin de map) et si c'est vrai alors nous bougeons tous les agents poussable dans la liste
 des cases sur le chemin */
-bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c)
+bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
 {
     // au cas ou mais impossible normalement car un joueur à toujours une case mais sécurité
     if (c != nullptr)
@@ -107,7 +107,7 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c)
                 {
                     // on déplace
                     Agent *a = c->getAgents().at(i);
-                    if (a->getPousse() || a->getBaba())
+                    if (a->getPousse() || (a->getBaba() && a == agentjoueur))
                     {
                         a->setCaseActuelle(cible);
                         c->retirerAgent(a);
@@ -116,7 +116,7 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c)
                 }
                 return true;
             }
-            bool res = deplaceRec(nv_direction, cible);
+            bool res = deplaceRec(nv_direction, cible,agentjoueur);
             if (res)
             {
                 for (size_t i = 0; i < c->getAgents().size(); i++)
@@ -125,6 +125,7 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c)
                     Agent *a = c->getAgents().at(i);
                     if (a->getPousse() || a->getBaba())
                     {
+                        cout << "iiiiiiii" << endl;
                         a->setCaseActuelle(cible);
                         c->retirerAgent(a);
                         cible->ajouterAgent(a);
@@ -156,7 +157,7 @@ void Jeu::deplace(Direction d)
         Agent &a = *(agents.at(i));
         Case *courant = a.getCaseActuelle();
         pair<int, int> nv_direction = directionToPair(d);
-        deplaceRec(nv_direction, courant);
+        deplaceRec(nv_direction, courant, &a);
     }
 }
 

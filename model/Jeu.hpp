@@ -26,7 +26,7 @@ public:
     Jeu();
 
     void ajouterAgent(Agent *a);
-    bool deplaceRec(pair<int, int> nv_direction, Case *c);
+    bool deplaceRec(pair<int, int> nv_direction, Case *c,Agent *joueur);
     void deplace(Direction d);
 
     const Plateau &getPlateau() const;
