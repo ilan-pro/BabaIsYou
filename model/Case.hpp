@@ -29,6 +29,7 @@ public:
 
   int getX() const;
   int getY() const;
+  bool containBaba() const;
 
   /**
    * on souhaite retourner un vector const c'est a dire non modifiable premier const pour la valeur de retour 2eme const pour nous assurer que la fonction ne modifie rien

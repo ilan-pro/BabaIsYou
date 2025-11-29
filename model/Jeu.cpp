@@ -12,18 +12,24 @@ Jeu::Jeu() : plateau(23, 23)
     agents.push_back(l);
     joueur.push_back(l);
 
-    Rocher *r = new Rocher(true, false, false, false, plateau.getCase(0, 1));
-    Case *c1 = plateau.getCase(0, 1);
+    Lapin *l2 = new Lapin(false, false, false, true, plateau.getCase(0, 1));
+    Case *c5 = plateau.getCase(0, 1);
+    c5->ajouterAgent(l2);
+    agents.push_back(l2);
+    joueur.push_back(l2);
+
+    Rocher *r = new Rocher(true, false, false, false, plateau.getCase(1, 1));
+    Case *c1 = plateau.getCase(1, 1);
     c1->ajouterAgent(r);
     agents.push_back(r);
-    Rocher *r2 = new Rocher(true, false, false, false, plateau.getCase(1, 1));
-    Case *c2 = plateau.getCase(0, 2);
+    Rocher *r2 = new Rocher(true, false, false, false, plateau.getCase(1, 2));
+    Case *c2 = plateau.getCase(1, 2);
     c2->ajouterAgent(r2);
     agents.push_back(r2);
 
-    Mur *m = new Mur(false, false, true, false, plateau.getCase(0, 7));
+    Mur *m = new Mur(false, false, true, false, plateau.getCase(1, 7));
 
-    Case *c3 = plateau.getCase(0, 7);
+    Case *c3 = plateau.getCase(1, 7);
     c3->ajouterAgent(m);
     agents.push_back(m);
 
@@ -95,7 +101,7 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c)
         }
         if (cible != nullptr)
         {
-            if (cible->getAgents().empty())
+            if (cible->getAgents().empty() || cible->containBaba())
             {
                 for (size_t i = 0; i < c->getAgents().size(); i++)
                 {
@@ -146,6 +152,7 @@ void Jeu::deplace(Direction d)
 
     for (size_t i = 0; i < joueur.size(); i++)
     {
+
         Agent &a = *(agents.at(i));
         Case *courant = a.getCaseActuelle();
         pair<int, int> nv_direction = directionToPair(d);

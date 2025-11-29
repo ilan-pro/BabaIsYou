@@ -12,6 +12,15 @@ Case::~Case()
     // cout << "destruction de la Case" << endl;
 }
 
+bool Case::containBaba() const {
+    for(size_t i=0; i<agents.size(); i++) {
+        if(agents.at(i)->getBaba()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void Case::ajouterAgent(Agent *a)
 {
     for (size_t i = 0; i < agents.size(); i++)
