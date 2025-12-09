@@ -13,7 +13,7 @@ Jeu::Jeu() : plateau(23, 23)
     rules.addRule(ObjectType::WALL, Property::STOP);
     rules.addRule(ObjectType::FLAG, Property::WIN);
     // rules.addRule(ObjectType::BABA, Property::STOP);
-    // rules.addRule(ObjectType::BABA, Property::PUSH);
+    rules.addRule(ObjectType::BABA, Property::PUSH);
 
     // Initialise la map de test
     initTestMap();
@@ -35,6 +35,11 @@ void Jeu::ajouterAgent(Agent *a)
 void Jeu::initTestMap()
 {
     // --- Lapins ---
+    Lapin *l0 = new Lapin(plateau.getCase(0, 2), rules);
+    plateau.getCase(0, 2)->ajouterAgent(l0);
+    agents.push_back(l0);
+    joueur.push_back(l0);
+
     Lapin *l1 = new Lapin(plateau.getCase(0, 0), rules);
     plateau.getCase(0, 0)->ajouterAgent(l1);
     agents.push_back(l1);
@@ -65,7 +70,15 @@ void Jeu::initTestMap()
     agents.push_back(e);
 }
 
+bool Jeu::aDejaBouge(Agent *a)
+{
+    return std::find(dejaBouges.begin(), dejaBouges.end(), a) != dejaBouges.end();
+}
 
+void Jeu::marqueCommeBouge(Agent *a)
+{
+    dejaBouges.push_back(a);
+}
 
 /**
 On appelle recursivement sur tous les agents en direction de nv_direct et si un retourne false alors nous ne pouvons pas faire le déplacement
@@ -204,13 +217,23 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
 
 void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
 {
+
     vector<Agent *> aDeplacer;
 
     for (Agent *a : src->getAgents())
     {
-
-        if (a->isPush() || (a->isYou() && a == demandeur))
+        if (aDejaBouge(a))
+            continue;
+        else if ((a->isYou() && a == demandeur))
+        {
+            aDeplacer.clear();
             aDeplacer.push_back(a);
+            break;
+        }
+        else if (a->isPush())
+        {
+            aDeplacer.push_back(a);
+        }
     }
 
     // On déplace après avoir fini de parcourir
@@ -219,42 +242,58 @@ void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
         src->retirerAgent(a);
         dst->ajouterAgent(a);
         a->setCaseActuelle(dst);
+        marqueCommeBouge(a);
     }
 }
 
 void Jeu::deplace(Direction d)
 {
     pair<int, int> nv_direction = directionToPair(d);
-    if (d == Direction::Droite || d == Direction::Bas)
+    // if (d == Direction::Droite || d == Direction::Bas)
+    // {
+
+    //     vector<Agent *>::iterator it = joueur.end() - 1;
+    //     while (it != joueur.begin())
+    //     {
+    //         Case *courant = (*it)->getCaseActuelle();
+
+    //         deplaceRec(nv_direction, courant, *it);
+    //         it--;
+    //     }
+    //     if (it == joueur.begin())
+    //     {
+    //         Case *courant = (*it)->getCaseActuelle();
+
+    //         deplaceRec(nv_direction, courant, *it);
+    //     }
+    //     dejaBouges.clear();
+    // }
+    // else
+    // {
+    vector<Agent *>::iterator it = joueur.begin();
+    for (it = joueur.begin(); it != joueur.end(); ++it)
     {
+        if (aDejaBouge(*it))
+            continue;
 
-        vector<Agent *>::iterator it = joueur.end() - 1;
-        while (it != joueur.begin())
-        {
-            Case *courant = (*it)->getCaseActuelle();
-
-            deplaceRec(nv_direction, courant, *it);
-            it--;
-        }
-        if (it == joueur.begin())
-        {
-            Case *courant = (*it)->getCaseActuelle();
-
-            deplaceRec(nv_direction, courant, *it);
-        }
+        Case *courant = (*it)->getCaseActuelle();
+        deplaceRec(nv_direction, courant, *it);
     }
-    else
-    {
-        for (size_t i = 0; i < joueur.size(); i++)
-        {
-            Agent &a = *(joueur.at(i));
-            Case *courant = a.getCaseActuelle();
 
-            cout << i << endl;
-            deplaceRec(nv_direction, courant, &a);
-            // deplacer liste
-        }
-    }
+    // for (size_t i = 0; i < joueur.size(); i++)
+    // {
+    //     Agent &a = *(joueur.at(i));
+    //     if (aDejaBouge(&a))
+    //         continue;
+    //     Case *courant = a.getCaseActuelle();
+
+    //     cout << i << endl;
+
+    //     deplaceRec(nv_direction, courant, &a);
+    //     // deplacer liste
+    // }
+    dejaBouges.clear();
+    //  }
 }
 
 const Plateau &Jeu::getPlateau() const

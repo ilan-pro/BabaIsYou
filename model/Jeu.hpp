@@ -24,6 +24,7 @@ private:
     vector<Agent *> agents;
     vector<Agent *> joueur;
     Regles rules;
+    vector<Agent *> dejaBouges;
 
 public:
     Jeu();
@@ -33,6 +34,8 @@ public:
     bool deplaceRec(pair<int, int> nv_direction, Case *c, Agent *joueur);
     void deplacerAgents(Case *src, Case *dst, Agent *demandeur);
     void deplace(Direction d);
+    bool aDejaBouge(Agent *a);
+    void marqueCommeBouge(Agent *a);
     const Plateau &getPlateau() const;
 };
 
