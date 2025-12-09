@@ -21,9 +21,12 @@ Case::~Case()
 //     return true;
 // }
 
-bool Case::ToutSuperposable() const {
-    for(size_t i=0; i<agents.size(); i++) {
-        if(!(agents.at(i)->toutFaux())) {
+bool Case::ToutSuperposable() const
+{
+    for (size_t i = 0; i < agents.size(); i++)
+    {
+        if (!(agents.at(i)->toutFaux()))
+        {
             return false;
         }
     }
@@ -43,15 +46,49 @@ void Case::ajouterAgent(Agent *a)
     agents.push_back(a);
 }
 
+// void Case::retirerAgent(Agent *a)
+// {
+//     for (size_t i = 0; i < agents.size(); i++)
+//     {
+//         if (agents.at(i) == a)
+//         {
+//             agents.erase(agents.begin() + i);
+//             cout << "retirer agents de listeagents dans Case" << endl;
+//             return;
+//         }
+//     }
+// }
+
+/*
+Pour gérer les problemes de suppressions dans
+un vector
+
+Soit avec un itérator on fait pointer it vers erase puisque erase renvoie le nouvel itérateur suivant
+
+Soit soit on fait une copie des objet dans un nouveau vector dans lequel on va supprimer tous ces éléments
+
+
+*/
+
 void Case::retirerAgent(Agent *a)
 {
-    for (size_t i = 0; i < agents.size(); i++)
+    /*
+
+    Attention ici erase renvoie un itérator pas un const itérator
+    */
+    std::vector<Agent *>::iterator it = agents.begin();
+
+    while (it != agents.end())
     {
-        if (agents.at(i) == a)
+        if (*it == a)
         {
-            agents.erase(agents.begin() + i);
+            it = agents.erase(it);
             cout << "retirer agents de listeagents dans Case" << endl;
-            return;
+            break;
+        }
+        else
+        {
+            ++it;
         }
     }
 }
@@ -87,7 +124,7 @@ void Case::afficherAgents() const
         for (size_t i = 0; i < agents.size(); i++)
         {
             // ici on à include le header de agent donc on peut
-            cout << '[' << agents.at(i)->getName() << ']';
+            cout << '[' << toString(agents.at(i)->getType()) << ']';
         }
     }
 }

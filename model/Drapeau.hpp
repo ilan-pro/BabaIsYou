@@ -6,7 +6,6 @@ class Drapeau : public Agent
 {
 private:
 public:
-    Drapeau(bool pousse, bool gagne, bool stop, bool baba, Case *caseInitiale);
     string getName() const;
 
     ~Drapeau();

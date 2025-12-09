@@ -27,6 +27,7 @@ public:
    */
   void retirerAgent(Agent *a);
 
+
   int getX() const;
   int getY() const;
   // bool containBaba_only() const;

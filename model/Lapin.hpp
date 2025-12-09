@@ -13,8 +13,7 @@ class Lapin : public Agent
 {
 private:
 public:
-  Lapin(bool pousse, bool gagne, bool stop, bool baba, Case *caseInitiale);
-  string getName() const;
+  Lapin(Case *caseInitiale, const Regles &rules);
   ~Lapin();
 };
 

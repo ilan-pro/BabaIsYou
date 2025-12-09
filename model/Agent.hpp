@@ -1,6 +1,7 @@
 #ifndef _AGENT
 #define _AGENT
-
+#include "Enums.hpp"
+#include "Regles.hpp"
 #include <string>
 #include <iostream>
 
@@ -10,41 +11,34 @@ class Case;
 
 class Agent
 {
-private:
-    string const name;
-
 protected:
-    bool pousse;
-    bool gagne;
-    bool stop;
-    bool baba;
-
-protected:
+   
+    Case *caseActuelle;
+    ObjectType type;
+    const Regles &rules;
     /*
         ici on ne creer surtout pas de case avec new (pas de composition)
         Donc cela implique que dans le destructeur il ne faut surtout pas faire de delete Case
     */
 
-    Case *caseActuelle; // ici un pointeur car un agent ne possede pas une Case elle existe a l'exterieur (on veut pas de composition)
-                        // en protected car seul les classes dérievées doivent pouvoir y accéder
+    // ici un pointeur car un agent ne possede pas une Case elle existe a l'exterieur (on veut pas de composition)
+    // en protected car seul les classes dérievées doivent pouvoir y accéder
 
 public:
-    Agent(string const name, bool pouuse, bool gagne, bool stop, bool baba, Case *caseActuelle);
-    virtual string getName() const;
+    Agent(Case *caseActuelle, ObjectType type, const Regles &rules);
+    virtual ObjectType getType() const;
     Case *getCaseActuelle() const;
-    void setCaseActuelle(Case *nouvelleCase);
+    virtual void setCaseActuelle(Case *nouvelleCase);
+    /*il faut mettre virtual car le type change pour la recherche dans la map*/
+ 
+
+    virtual bool isPush() const;
+    virtual bool isStop() const;
+    virtual bool isYou() const;
+    virtual bool isWin() const;
     virtual ~Agent();
-    void setPousse(bool valeur);
-    void setGagne(bool valeur);
-    void setStop(bool valeur);
-    void setBaba(bool valeur);
     /*tous les booléans à faux SAUF pour le baba car nous pouvons aller sur un baba*/
     bool toutFaux() const;
-
-    bool getPousse() const;
-    bool getGagne() const;
-    bool getStop() const;
-    bool getBaba() const;
 };
 
 #endif

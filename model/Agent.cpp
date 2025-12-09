@@ -1,13 +1,6 @@
 #include "Agent.hpp"
 
-Agent::Agent(string const name, bool pousse, bool gagne, bool stop, bool baba, Case *caseActuelle) : name{name}, pousse{pousse}, gagne{gagne}, stop{stop}, baba{baba}, caseActuelle{caseActuelle}
-{
-}
-
-string Agent::getName() const
-{
-    return name;
-}
+Agent::Agent(Case *caseActuelle, ObjectType type, const Regles &rules) : caseActuelle{caseActuelle}, type{type}, rules{rules} {}
 
 Case *Agent::getCaseActuelle() const
 {
@@ -19,54 +12,26 @@ void Agent::setCaseActuelle(Case *nouvelleCase)
     caseActuelle = nouvelleCase;
 }
 
-bool Agent::getPousse() const
-{
-    return pousse;
-}
-
-bool Agent::getGagne() const
-{
-    return gagne;
-}
-
-bool Agent::getStop() const
-{
-    return stop;
-}
-
-bool Agent::getBaba() const
-{
-    return baba;
-}
-
-void Agent::setPousse(bool valeur)
-{
-    pousse = valeur;
-}
-
-void Agent::setGagne(bool valeur)
-{
-    gagne = valeur;
-}
-
-void Agent::setStop(bool valeur)
-{
-    stop = valeur;
-}
-
-void Agent::setBaba(bool valeur)
-{
-    baba = valeur;
-}
-
 Agent::~Agent()
 {
-    cout << "destruction de l'agent de nom :" << name << endl;
+    cout << "destruction de l'agent de nom :" << endl;
 }
 
-bool Agent::toutFaux() const {
-    if(!(pousse || gagne || stop)){
+ObjectType Agent::getType() const
+{
+    return type;
+}
+
+bool Agent::toutFaux() const
+{
+    if (!(isPush() || isWin() || isStop()))
+    {
         return true;
     }
     return false;
 }
+
+bool Agent::isPush() const { return rules.has(Property::PUSH, type); }
+bool Agent::isStop() const { return rules.has(Property::STOP, type); }
+bool Agent::isYou() const { return rules.has(Property::YOU, type); }
+bool Agent::isWin() const { return rules.has(Property::WIN, type); }

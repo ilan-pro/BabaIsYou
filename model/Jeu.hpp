@@ -1,9 +1,12 @@
 #ifndef _JEU
 #define _JEU
+
 #include <vector>
 #include "Plateau.hpp"
 #include "Direction.hpp"
 #include "Agent.hpp"
+#include "Regles.hpp"
+
 using namespace std;
 
 class Jeu
@@ -19,19 +22,18 @@ private:
      * Attention ici ne pas oublié de delete dans le destructeur de Jeu sinon fuite de mémoire
      */
     vector<Agent *> agents;
-
     vector<Agent *> joueur;
+    Regles rules;
 
 public:
     Jeu();
-
-    void ajouterAgent(Agent *a);
-    bool deplaceRec(pair<int, int> nv_direction, Case *c,Agent *joueur);
-    void deplace(Direction d);
-
-    const Plateau &getPlateau() const;
-
     ~Jeu();
+    void ajouterAgent(Agent *a);
+    void initTestMap();
+    bool deplaceRec(pair<int, int> nv_direction, Case *c, Agent *joueur);
+    void deplacerAgents(Case *src, Case *dst, Agent *demandeur);
+    void deplace(Direction d);
+    const Plateau &getPlateau() const;
 };
 
 #endif
