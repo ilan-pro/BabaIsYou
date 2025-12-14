@@ -12,7 +12,7 @@ Jeu::Jeu() : plateau(23, 23)
     rules.addRule(ObjectType::ROCK, Property::PUSH);
     rules.addRule(ObjectType::WALL, Property::STOP);
     rules.addRule(ObjectType::FLAG, Property::WIN);
-    // rules.addRule(ObjectType::BABA, Property::STOP);
+    rules.addRule(ObjectType::BABA, Property::STOP);
     rules.addRule(ObjectType::BABA, Property::PUSH);
 
     // Initialise la map de test
@@ -35,8 +35,8 @@ void Jeu::ajouterAgent(Agent *a)
 void Jeu::initTestMap()
 {
     // --- Lapins ---
-    Lapin *l0 = new Lapin(plateau.getCase(0, 2), rules);
-    plateau.getCase(0, 2)->ajouterAgent(l0);
+    Lapin *l0 = new Lapin(plateau.getCase(0, 0), rules);
+    plateau.getCase(0, 0)->ajouterAgent(l0);
     agents.push_back(l0);
     joueur.push_back(l0);
 
@@ -45,18 +45,18 @@ void Jeu::initTestMap()
     agents.push_back(l1);
     joueur.push_back(l1);
 
-    Lapin *l2 = new Lapin(plateau.getCase(0, 1), rules);
-    plateau.getCase(0, 1)->ajouterAgent(l2);
+    Lapin *l2 = new Lapin(plateau.getCase(0, 0), rules);
+    plateau.getCase(0, 0)->ajouterAgent(l2);
     agents.push_back(l2);
     joueur.push_back(l2);
 
     // --- Rochers ---
-    Rocher *r1 = new Rocher(plateau.getCase(1, 1), rules);
-    plateau.getCase(1, 1)->ajouterAgent(r1);
+    Rocher *r1 = new Rocher(plateau.getCase(0, 1), rules);
+    plateau.getCase(0, 1)->ajouterAgent(r1);
     agents.push_back(r1);
 
-    Rocher *r2 = new Rocher(plateau.getCase(1, 2), rules);
-    plateau.getCase(1, 2)->ajouterAgent(r2);
+    Rocher *r2 = new Rocher(plateau.getCase(0, 2), rules);
+    plateau.getCase(0, 2)->ajouterAgent(r2);
     agents.push_back(r2);
 
     // --- Mur ---
@@ -178,8 +178,8 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
     Case *cible = plateau.getCase(c->getX() + nv_direction.first, c->getY() + nv_direction.second);
     if (!cible)
         return false; // sortie du plateau
-
-    for (Agent *a : c->getAgents())
+    
+    for (Agent *a : cible->getAgents()) 
     {
         //  Agent *a = c->getAgents().at(i);
         /*si dans notre case actuelle ou les suivantes il y a un élément pas poussable*/
