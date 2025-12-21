@@ -15,7 +15,7 @@ Jeu::Jeu() : plateau(23, 23)
     rules.addRule(ObjectType::WALL, Property::STOP);
     rules.addRule(ObjectType::FLAG, Property::WIN);
     rules.addRule(ObjectType::BABA, Property::STOP);
-     //rules.addRule(ObjectType::BABA, Property::PUSH);
+    // rules.addRule(ObjectType::BABA, Property::PUSH);
     rules.addRule(ObjectType::TEXT, Property::PUSH);
 
     // Initialise la map de test
@@ -38,18 +38,18 @@ void Jeu::ajouterAgent(Agent *a)
 void Jeu::initTestMap()
 {
     // --- Lapins ---
-    Lapin *l0 = new Lapin(plateau.getCase(5,5), rules);
-    plateau.getCase(5, 5)->ajouterAgent(l0);
+    Lapin *l0 = new Lapin(plateau.getCase(0, 0), rules);
+    plateau.getCase(0, 0)->ajouterAgent(l0);
     agents.push_back(l0);
     joueur.push_back(l0);
 
-    Lapin *l1 = new Lapin(plateau.getCase(5, 6), rules);
-    plateau.getCase(5, 6)->ajouterAgent(l1);
+    Lapin *l1 = new Lapin(plateau.getCase(0, 0), rules);
+    plateau.getCase(0, 0)->ajouterAgent(l1);
     agents.push_back(l1);
     joueur.push_back(l1);
 
-    Lapin *l2 = new Lapin(plateau.getCase(5, 7), rules);
-    plateau.getCase(5, 7)->ajouterAgent(l2);
+    Lapin *l2 = new Lapin(plateau.getCase(0, 0), rules);
+    plateau.getCase(0, 0)->ajouterAgent(l2);
     agents.push_back(l2);
     joueur.push_back(l2);
 
@@ -90,9 +90,18 @@ bool Jeu::aDejaBouge(Agent *a)
     return std::find(dejaBouges.begin(), dejaBouges.end(), a) != dejaBouges.end();
 }
 
+bool Jeu::demandeuraDejaBouge()
+{
+    return demandeur.empty();
+}
+
 void Jeu::marqueCommeBouge(Agent *a)
 {
     dejaBouges.push_back(a);
+}
+void Jeu::marqueCommeDemandeur(Agent *a)
+{
+    demandeur.push_back(a);
 }
 
 /**
@@ -211,8 +220,7 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
     {
         if (aDejaBouge(a))
         {
-            deplacerAgents(c, cible, agentjoueur);
-            return true;
+            marqueCommeDemandeur(a);
         }
     }
 
@@ -250,8 +258,16 @@ void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
         if (aDejaBouge(a))
         {
             cout << "a deja bougé" << endl;
+            marqueCommeDemandeur(a);
             continue;
         }
+
+        else if (!aDejaBouge(a) && !demandeuraDejaBouge() && a != demandeur)
+        {
+            cout << "je dois pas bouger car derriere il a déja bougé" << endl;
+            continue;
+        }
+
         else if ((a->isYou() && a == demandeur))
         {
             aDeplacer.clear();
@@ -259,6 +275,7 @@ void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
             cout << "you se deplace" << endl;
             break;
         }
+
         else if (a->isPush())
         {
             cout << "is push se déplace" << endl;
@@ -303,11 +320,15 @@ void Jeu::deplace(Direction d)
     vector<Agent *>::iterator it = joueur.begin();
     for (it = joueur.begin(); it != joueur.end(); ++it)
     {
+
         if (aDejaBouge(*it))
+        {
             continue;
+        }
         cout << "prochain lapin" << endl;
         Case *courant = (*it)->getCaseActuelle();
         deplaceRec(nv_direction, courant, *it);
+        demandeur.clear();
     }
 
     // for (size_t i = 0; i < joueur.size(); i++)
@@ -322,6 +343,7 @@ void Jeu::deplace(Direction d)
     //     deplaceRec(nv_direction, courant, &a);
     //     // deplacer liste
     // }
+    demandeur.clear();
     dejaBouges.clear();
     //  }
 }

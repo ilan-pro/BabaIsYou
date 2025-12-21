@@ -25,6 +25,7 @@ private:
     vector<Agent *> joueur;
     Regles rules;
     vector<Agent *> dejaBouges;
+    vector<Agent*> demandeur;
 
 public:
     Jeu();
@@ -35,7 +36,9 @@ public:
     void deplacerAgents(Case *src, Case *dst, Agent *demandeur);
     void deplace(Direction d);
     bool aDejaBouge(Agent *a);
+    bool demandeuraDejaBouge();
     void marqueCommeBouge(Agent *a);
+    void marqueCommeDemandeur(Agent *a);
     const Plateau &getPlateau() const;
 };
 
