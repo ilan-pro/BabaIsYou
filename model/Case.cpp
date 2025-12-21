@@ -33,6 +33,8 @@ bool Case::ToutSuperposable() const
     return true;
 }
 
+
+
 void Case::ajouterAgent(Agent *a)
 {
     for (size_t i = 0; i < agents.size(); i++)

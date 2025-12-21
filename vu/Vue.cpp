@@ -17,6 +17,29 @@ void Vue::chargerTextures()
     textureMur.loadFromFile("./ressource/blanc.png");
     textureRocher.loadFromFile("./ressource/roche.png");
     textureEau.loadFromFile("./ressource/waves.png");
+    textureFlag.loadFromFile("./ressource/mur.png");
+    textureText.loadFromFile("./ressource/murs.png");
+}
+
+sf::Texture &Vue::getTextureForAgent(Agent *a)
+{
+    switch (a->getType())
+    {
+    case ObjectType::WATER:
+        return textureEau;
+    case ObjectType::BABA:
+        return textureLapin;
+    case ObjectType::ROCK:
+        return textureRocher;
+    case ObjectType::WALL:
+        return textureMur;
+    case ObjectType::FLAG:
+        return textureFlag;
+    case ObjectType::TEXT:
+        return textureText;
+    default:
+        return textureLapin; // fallback
+    }
 }
 
 void Vue::afficher()
@@ -32,14 +55,7 @@ void Vue::afficher()
             for (Agent *a : c->getAgents())
             {
                 sf::Sprite sprite;
-                if (dynamic_cast<Lapin *>(a))
-                    sprite.setTexture(textureLapin);
-                else if (dynamic_cast<Mur *>(a))
-                    sprite.setTexture(textureMur);
-                else if (dynamic_cast<Rocher *>(a))
-                    sprite.setTexture(textureRocher);
-                else if (dynamic_cast<Eau *>(a))
-                    sprite.setTexture(textureEau);
+                sprite.setTexture(getTextureForAgent(a));
 
                 // sprite.setScale(sf::Vector2f(0.1, 0.1));
 

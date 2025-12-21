@@ -35,3 +35,5 @@ bool Agent::isPush() const { return rules.has(Property::PUSH, type); }
 bool Agent::isStop() const { return rules.has(Property::STOP, type); }
 bool Agent::isYou() const { return rules.has(Property::YOU, type); }
 bool Agent::isWin() const { return rules.has(Property::WIN, type); }
+
+bool Agent::isMot() const { return false; }

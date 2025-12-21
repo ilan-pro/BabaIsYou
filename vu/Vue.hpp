@@ -13,9 +13,12 @@ private:
     sf::Texture textureMur;
     sf::Texture textureRocher;
     sf::Texture textureEau;
-
+    sf::Texture textureFlag;
+    sf::Texture textureText;
 public:
     Vue(sf::RenderWindow &win, Jeu &j);
+
+    sf::Texture &getTextureForAgent(Agent *a);
 
     void chargerTextures();
 

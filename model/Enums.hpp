@@ -10,18 +10,18 @@ check la propriéte et regarder la list de ObjectType qui possède
 cette proprité
 */
 
+
 enum class ObjectType
 {
-    NONE,
+    WATER,
     BABA,
     ROCK,
     WALL,
     FLAG,
-    TEXT_BABA,
-    TEXT_ROCK,
-    TEXT_WALL,
-    TEXT_FLAG
+    TEXT
+
 };
+
 
 enum class Property
 {

@@ -3,6 +3,8 @@
 #include "Rocher.hpp"
 #include "Mur.hpp"
 #include "Eau.hpp"
+#include "Mot.hpp"
+#include "Word.hpp"
 
 Jeu::Jeu() : plateau(23, 23)
 {
@@ -13,7 +15,8 @@ Jeu::Jeu() : plateau(23, 23)
     rules.addRule(ObjectType::WALL, Property::STOP);
     rules.addRule(ObjectType::FLAG, Property::WIN);
     rules.addRule(ObjectType::BABA, Property::STOP);
-    rules.addRule(ObjectType::BABA, Property::PUSH);
+     //rules.addRule(ObjectType::BABA, Property::PUSH);
+    rules.addRule(ObjectType::TEXT, Property::PUSH);
 
     // Initialise la map de test
     initTestMap();
@@ -35,18 +38,18 @@ void Jeu::ajouterAgent(Agent *a)
 void Jeu::initTestMap()
 {
     // --- Lapins ---
-    Lapin *l0 = new Lapin(plateau.getCase(0, 0), rules);
-    plateau.getCase(0, 0)->ajouterAgent(l0);
+    Lapin *l0 = new Lapin(plateau.getCase(5,5), rules);
+    plateau.getCase(5, 5)->ajouterAgent(l0);
     agents.push_back(l0);
     joueur.push_back(l0);
 
-    Lapin *l1 = new Lapin(plateau.getCase(0, 0), rules);
-    plateau.getCase(0, 0)->ajouterAgent(l1);
+    Lapin *l1 = new Lapin(plateau.getCase(5, 6), rules);
+    plateau.getCase(5, 6)->ajouterAgent(l1);
     agents.push_back(l1);
     joueur.push_back(l1);
 
-    Lapin *l2 = new Lapin(plateau.getCase(0, 0), rules);
-    plateau.getCase(0, 0)->ajouterAgent(l2);
+    Lapin *l2 = new Lapin(plateau.getCase(5, 7), rules);
+    plateau.getCase(5, 7)->ajouterAgent(l2);
     agents.push_back(l2);
     joueur.push_back(l2);
 
@@ -68,6 +71,18 @@ void Jeu::initTestMap()
     Eau *e = new Eau(plateau.getCase(1, 5), rules);
     plateau.getCase(1, 5)->ajouterAgent(e);
     agents.push_back(e);
+
+    Mot *baba = new Mot(plateau.getCase(4, 5), Word::BABA, rules);
+    plateau.getCase(4, 5)->ajouterAgent(baba);
+    agents.push_back(baba);
+
+    Mot *is = new Mot(plateau.getCase(4, 6), Word::IS, rules);
+    plateau.getCase(4, 6)->ajouterAgent(is);
+    agents.push_back(is);
+
+    Mot *you = new Mot(plateau.getCase(4, 7), Word::YOU, rules);
+    plateau.getCase(4, 7)->ajouterAgent(you);
+    agents.push_back(you);
 }
 
 bool Jeu::aDejaBouge(Agent *a)
@@ -178,16 +193,26 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
     Case *cible = plateau.getCase(c->getX() + nv_direction.first, c->getY() + nv_direction.second);
     if (!cible)
         return false; // sortie du plateau
-    
-    for (Agent *a : cible->getAgents()) 
+
+    for (Agent *a : cible->getAgents())
     {
         //  Agent *a = c->getAgents().at(i);
         /*si dans notre case actuelle ou les suivantes il y a un élément pas poussable*/
+
         if (a->isStop() && !(a->isYou()))
         {
             cout << "is STOP or NOT YOU" << endl;
             cout << toString(a->getType()) << endl;
             return false;
+        }
+    }
+
+    for (Agent *a : cible->getAgents())
+    {
+        if (aDejaBouge(a))
+        {
+            deplacerAgents(c, cible, agentjoueur);
+            return true;
         }
     }
 
@@ -223,15 +248,20 @@ void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
     for (Agent *a : src->getAgents())
     {
         if (aDejaBouge(a))
+        {
+            cout << "a deja bougé" << endl;
             continue;
+        }
         else if ((a->isYou() && a == demandeur))
         {
             aDeplacer.clear();
             aDeplacer.push_back(a);
+            cout << "you se deplace" << endl;
             break;
         }
         else if (a->isPush())
         {
+            cout << "is push se déplace" << endl;
             aDeplacer.push_back(a);
         }
     }
@@ -275,7 +305,7 @@ void Jeu::deplace(Direction d)
     {
         if (aDejaBouge(*it))
             continue;
-
+        cout << "prochain lapin" << endl;
         Case *courant = (*it)->getCaseActuelle();
         deplaceRec(nv_direction, courant, *it);
     }

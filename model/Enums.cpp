@@ -10,8 +10,8 @@ string toString(ObjectType obj)
 {
     switch (obj)
     {
-    case ObjectType::NONE:
-        return "NONE";
+    case ObjectType::WATER:
+        return "WATER";
     case ObjectType::BABA:
         return "BABA";
     case ObjectType::ROCK:
@@ -20,14 +20,8 @@ string toString(ObjectType obj)
         return "WALL";
     case ObjectType::FLAG:
         return "FLAG";
-    case ObjectType::TEXT_BABA:
-        return "TEXT_BABA";
-    case ObjectType::TEXT_ROCK:
-        return "TEXT_ROCK";
-    case ObjectType::TEXT_WALL:
-        return "TEXT_WALL";
-    case ObjectType::TEXT_FLAG:
-        return "TEXT_FLAG";
+    case ObjectType::TEXT:
+        return "TEXT";
     }
     return "?";
 }
