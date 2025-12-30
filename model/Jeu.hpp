@@ -25,13 +25,14 @@ private:
     vector<Agent *> joueur;
     Regles rules;
     vector<Agent *> dejaBouges;
-    vector<Agent*> demandeur;
+    vector<Agent *> demandeur;
 
 public:
     Jeu();
     ~Jeu();
     void ajouterAgent(Agent *a);
     void initTestMap();
+    void supprimerDeDemandeur(Agent *a);
     bool deplaceRec(pair<int, int> nv_direction, Case *c, Agent *joueur);
     void deplacerAgents(Case *src, Case *dst, Agent *demandeur);
     void deplace(Direction d);

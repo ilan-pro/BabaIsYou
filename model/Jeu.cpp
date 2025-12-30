@@ -14,8 +14,8 @@ Jeu::Jeu() : plateau(23, 23)
     rules.addRule(ObjectType::ROCK, Property::PUSH);
     rules.addRule(ObjectType::WALL, Property::STOP);
     rules.addRule(ObjectType::FLAG, Property::WIN);
-    rules.addRule(ObjectType::BABA, Property::STOP);
-    // rules.addRule(ObjectType::BABA, Property::PUSH);
+    // rules.addRule(ObjectType::BABA, Property::STOP);
+    //rules.addRule(ObjectType::BABA, Property::PUSH);
     rules.addRule(ObjectType::TEXT, Property::PUSH);
 
     // Initialise la map de test
@@ -38,18 +38,18 @@ void Jeu::ajouterAgent(Agent *a)
 void Jeu::initTestMap()
 {
     // --- Lapins ---
-    Lapin *l0 = new Lapin(plateau.getCase(0, 0), rules);
-    plateau.getCase(0, 0)->ajouterAgent(l0);
+    Lapin *l0 = new Lapin(plateau.getCase(6, 0), rules);
+    plateau.getCase(6, 0)->ajouterAgent(l0);
     agents.push_back(l0);
     joueur.push_back(l0);
 
-    Lapin *l1 = new Lapin(plateau.getCase(0, 0), rules);
-    plateau.getCase(0, 0)->ajouterAgent(l1);
+    Lapin *l1 = new Lapin(plateau.getCase(6, 1), rules);
+    plateau.getCase(6, 1)->ajouterAgent(l1);
     agents.push_back(l1);
     joueur.push_back(l1);
 
-    Lapin *l2 = new Lapin(plateau.getCase(0, 0), rules);
-    plateau.getCase(0, 0)->ajouterAgent(l2);
+    Lapin *l2 = new Lapin(plateau.getCase(6, 2), rules);
+    plateau.getCase(6, 2)->ajouterAgent(l2);
     agents.push_back(l2);
     joueur.push_back(l2);
 
@@ -102,6 +102,13 @@ void Jeu::marqueCommeBouge(Agent *a)
 void Jeu::marqueCommeDemandeur(Agent *a)
 {
     demandeur.push_back(a);
+}
+
+void Jeu::supprimerDeDemandeur(Agent *a)
+{
+    demandeur.erase(
+        std::remove(demandeur.begin(), demandeur.end(), a),
+        demandeur.end());
 }
 
 /**
@@ -216,14 +223,6 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
         }
     }
 
-    for (Agent *a : cible->getAgents())
-    {
-        if (aDejaBouge(a))
-        {
-            marqueCommeDemandeur(a);
-        }
-    }
-
     /*si la cible est vide ou contient uniquement des baba*/
     /*nos cas d'arrêts*/
 
@@ -232,6 +231,16 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
         cout << "baba ou rien devant moi" << endl;
         deplacerAgents(c, cible, agentjoueur);
         return true;
+    }
+
+    for (Agent *a : cible->getAgents())
+    {
+        if (aDejaBouge(a))
+        {
+
+            cout << "j'ai déja bougé" << endl;
+            marqueCommeDemandeur(a);
+        }
     }
 
     bool res = deplaceRec(nv_direction, cible, agentjoueur);
@@ -258,12 +267,14 @@ void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
         if (aDejaBouge(a))
         {
             cout << "a deja bougé" << endl;
-            marqueCommeDemandeur(a);
+            supprimerDeDemandeur(a);
             continue;
         }
 
         else if (!aDejaBouge(a) && !demandeuraDejaBouge() && a != demandeur)
         {
+            cout << toString(a->getType()) << endl;
+
             cout << "je dois pas bouger car derriere il a déja bougé" << endl;
             continue;
         }

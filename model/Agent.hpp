@@ -30,6 +30,8 @@ public:
     virtual void setCaseActuelle(Case *nouvelleCase);
     /*il faut mettre virtual car le type change pour la recherche dans la map*/
 
+ 
+
     virtual bool isPush() const;
     virtual bool isStop() const;
     virtual bool isYou() const;
@@ -37,6 +39,7 @@ public:
     virtual bool isMot() const;
     virtual ~Agent();
     /*tous les booléans à faux SAUF pour le baba car nous pouvons aller sur un baba*/
+
     bool toutFaux() const;
 };
 

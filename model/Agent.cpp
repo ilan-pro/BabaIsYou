@@ -22,6 +22,7 @@ ObjectType Agent::getType() const
     return type;
 }
 
+
 bool Agent::toutFaux() const
 {
     if (!(isPush() || isWin() || isStop()))
