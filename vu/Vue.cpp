@@ -19,7 +19,11 @@ void Vue::chargerTextures()
     textureEau.loadFromFile("./ressource/waves.png");
     textureFlag.loadFromFile("./ressource/mur.png");
     textureText.loadFromFile("./ressource/murs.png");
+    wordTextures[Word::BABA].loadFromFile("./ressource/text_baba.png");
+    wordTextures[Word::ROCK].loadFromFile("./ressource/text_rock.png");
+    wordTextures[Word::WALL].loadFromFile("./ressource/text_flag.png");
 }
+
 
 sf::Texture &Vue::getTextureForAgent(Agent *a)
 {
@@ -36,7 +40,9 @@ sf::Texture &Vue::getTextureForAgent(Agent *a)
     case ObjectType::FLAG:
         return textureFlag;
     case ObjectType::TEXT:
-        return textureText;
+         Mot* m = dynamic_cast<Mot*>(a);
+        if (m) return wordTextures[m->getWord()];
+        else return textureText;
     default:
         return textureLapin; // fallback
     }

@@ -1,8 +1,10 @@
 #ifndef _VUE
 #define _VUE
 
+#include <map>
 #include <SFML/Graphics.hpp>
 #include "../model/Jeu.hpp"
+
 
 class Vue
 {
@@ -15,13 +17,15 @@ private:
     sf::Texture textureEau;
     sf::Texture textureFlag;
     sf::Texture textureText;
-    private map<Word, sf::Texture> wordTextures;
+    std::map<Word, sf::Texture> wordTextures;
 public:
     Vue(sf::RenderWindow &win, Jeu &j);
 
     sf::Texture &getTextureForAgent(Agent *a);
 
     void chargerTextures();
+  
+
 
     void afficher();
 
