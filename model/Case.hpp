@@ -2,6 +2,7 @@
 #define _CASE
 #include <vector>
 #include <iostream>
+// #include "Word.hpp"
 
 using namespace std;
 
@@ -42,6 +43,7 @@ public:
 
   void afficherAgents() const;
   friend ostream &operator<<(ostream &out, const Case &c);
+  // const WordInfo* motPresentEtNom() const; 
 };
 
 #endif

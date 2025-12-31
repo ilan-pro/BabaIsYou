@@ -19,6 +19,10 @@ public:
     bool isNoun() const;
     bool isOperator() const;
     bool isProperty() const;
+    // virtual bool isPush() const;
+    // virtual bool isStop() const;
+    // virtual bool isYou() const;
+    // virtual bool isWin() const;
 };
 
 #endif

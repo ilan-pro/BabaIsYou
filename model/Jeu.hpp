@@ -41,6 +41,8 @@ public:
     void marqueCommeBouge(Agent *a);
     void marqueCommeDemandeur(Agent *a);
     const Plateau &getPlateau() const;
+    void MajRegle();
+    void VerifJoueur();
 };
 
 #endif

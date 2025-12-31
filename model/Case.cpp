@@ -33,8 +33,6 @@ bool Case::ToutSuperposable() const
     return true;
 }
 
-
-
 void Case::ajouterAgent(Agent *a)
 {
     for (size_t i = 0; i < agents.size(); i++)
@@ -85,7 +83,7 @@ void Case::retirerAgent(Agent *a)
         if (*it == a)
         {
             it = agents.erase(it);
-            cout << "retirer agents de listeagents dans Case" << endl;
+            // cout << "retirer agents de listeagents dans Case" << endl;
             break;
         }
         else
@@ -139,3 +137,20 @@ ostream &operator<<(ostream &out, const Case &c)
     }
     return out;
 }
+
+// const WordInfo *Case::motPresentEtNom() const
+// {
+//     for (Agent *a : getAgents())
+//     {
+//         if (a->getType() == ObjectType::TEXT)
+//         {
+//             Mot *m = dynamic_cast<Mot *>(a);
+//             if (m->isNoun())
+//             {
+//                 const WordInfo m_info = getWordInfo(m->getWord());
+//                 return &m_info;
+//             }
+//         }
+//     }
+//     return nullptr;
+// }

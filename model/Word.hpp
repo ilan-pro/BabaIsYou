@@ -40,5 +40,8 @@ struct WordInfo {
 };
 
 const WordInfo& getWordInfo(Word w);
+const bool isNom(WordInfo& w);
+const bool isOperator(WordInfo& w);
+const bool isProperty(WordInfo& w);
 
 #endif

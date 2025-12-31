@@ -5,6 +5,8 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+// #include "Plateau.hpp"
+
 using namespace std;
 
 typedef map<Property, vector<ObjectType>> RuleMap;
@@ -28,6 +30,12 @@ public:
     pour que l'on puisse debuger lorsqu'on testera
     */
     void print() const;
+
+    /**
+     * Fonction qui permet de vérifier si une règle est bien formé et l'ajout si c'est le cas
+     */
+    // void VerifRule(const WordInfo& m_info, const Case *c, Regles &regles, const Plateau& p) const;
+    // Mot* BonMotPresent(int i, int j, const Plateau& p, bool veutOperator) const;
 };
 
 #endif

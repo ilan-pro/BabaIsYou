@@ -5,7 +5,6 @@
 /* static ici pour que ce soit présent qu'a l'interieur de ce fichier .pp on 
 ne souhaite pas que cette WORD_TABLE soit connue a l'exterieur 
 */
-
 static const std::map<Word, WordInfo> WORD_TABLE = {
     { Word::BABA,  { WordCategory::NOUN, ObjectType::BABA,  {} } },
     { Word::ROCK,  { WordCategory::NOUN, ObjectType::ROCK,  {} } },
@@ -30,4 +29,16 @@ const WordInfo& getWordInfo(Word w) {
     if (it == WORD_TABLE.end())
         throw std::logic_error("Unknown Word");
     return it->second;
+}
+
+const bool isNoun(WordInfo& w) {
+    return w.category == WordCategory::NOUN;
+}
+
+const bool isOperator(WordInfo& w) {
+        return w.category == WordCategory::OPERATOR;
+}
+
+const bool isProperty(WordInfo& w) {
+    return w.category == WordCategory::PROPERTY;
 }

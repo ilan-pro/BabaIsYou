@@ -15,6 +15,7 @@ private:
     sf::Texture textureEau;
     sf::Texture textureFlag;
     sf::Texture textureText;
+    private map<Word, sf::Texture> wordTextures;
 public:
     Vue(sf::RenderWindow &win, Jeu &j);
 

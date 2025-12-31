@@ -16,6 +16,7 @@ void Controller::gestionEvenement(const sf::Event &e) {
             default: pressed = false; break;
         }
         if (pressed) {
+            jeu.MajRegle();
             jeu.deplace(dir); // le modèle fait tout le calcul
         }
     }

@@ -8,15 +8,14 @@
 
 Jeu::Jeu() : plateau(23, 23)
 {
-
     // Initialise les règles
-    rules.addRule(ObjectType::BABA, Property::YOU);
-    rules.addRule(ObjectType::ROCK, Property::PUSH);
-    rules.addRule(ObjectType::WALL, Property::STOP);
-    rules.addRule(ObjectType::FLAG, Property::WIN);
+    // rules.addRule(ObjectType::BABA, Property::YOU);
+    // rules.addRule(ObjectType::ROCK, Property::PUSH);
+    // rules.addRule(ObjectType::WALL, Property::STOP);
+    // rules.addRule(ObjectType::FLAG, Property::WIN);
     // rules.addRule(ObjectType::BABA, Property::STOP);
-    //rules.addRule(ObjectType::BABA, Property::PUSH);
-    rules.addRule(ObjectType::TEXT, Property::PUSH);
+    // // rules.addRule(ObjectType::BABA, Property::PUSH);
+    // rules.addRule(ObjectType::TEXT, Property::PUSH);
 
     // Initialise la map de test
     initTestMap();
@@ -38,18 +37,18 @@ void Jeu::ajouterAgent(Agent *a)
 void Jeu::initTestMap()
 {
     // --- Lapins ---
-    Lapin *l0 = new Lapin(plateau.getCase(6, 0), rules);
-    plateau.getCase(6, 0)->ajouterAgent(l0);
+    Lapin *l0 = new Lapin(plateau.getCase(4, 4), rules);
+    plateau.getCase(4, 4)->ajouterAgent(l0);
     agents.push_back(l0);
     joueur.push_back(l0);
 
-    Lapin *l1 = new Lapin(plateau.getCase(6, 1), rules);
-    plateau.getCase(6, 1)->ajouterAgent(l1);
+    Lapin *l1 = new Lapin(plateau.getCase(4, 4), rules);
+    plateau.getCase(4, 4)->ajouterAgent(l1);
     agents.push_back(l1);
     joueur.push_back(l1);
 
-    Lapin *l2 = new Lapin(plateau.getCase(6, 2), rules);
-    plateau.getCase(6, 2)->ajouterAgent(l2);
+    Lapin *l2 = new Lapin(plateau.getCase(4, 4), rules);
+    plateau.getCase(4, 4)->ajouterAgent(l2);
     agents.push_back(l2);
     joueur.push_back(l2);
 
@@ -72,6 +71,7 @@ void Jeu::initTestMap()
     plateau.getCase(1, 5)->ajouterAgent(e);
     agents.push_back(e);
 
+    // BABA IS YOU
     Mot *baba = new Mot(plateau.getCase(4, 5), Word::BABA, rules);
     plateau.getCase(4, 5)->ajouterAgent(baba);
     agents.push_back(baba);
@@ -83,6 +83,32 @@ void Jeu::initTestMap()
     Mot *you = new Mot(plateau.getCase(4, 7), Word::YOU, rules);
     plateau.getCase(4, 7)->ajouterAgent(you);
     agents.push_back(you);
+
+    // WALL IS STOP
+    Mot *wall = new Mot(plateau.getCase(7, 7), Word::WALL, rules);
+    plateau.getCase(7, 7)->ajouterAgent(wall);
+    agents.push_back(wall);
+
+    Mot *is2 = new Mot(plateau.getCase(7, 8), Word::IS, rules);
+    plateau.getCase(7, 8)->ajouterAgent(is2);
+    agents.push_back(is2);
+
+    Mot *stop = new Mot(plateau.getCase(7, 9), Word::STOP, rules);
+    plateau.getCase(7, 9)->ajouterAgent(stop);
+    agents.push_back(stop);
+
+    // ROCK IS PUSH
+    Mot *rock = new Mot(plateau.getCase(10, 3), Word::ROCK, rules);
+    plateau.getCase(10, 3)->ajouterAgent(rock);
+    agents.push_back(rock);
+
+    Mot *is3 = new Mot(plateau.getCase(10, 4), Word::IS, rules);
+    plateau.getCase(10, 4)->ajouterAgent(is3);
+    agents.push_back(is3);
+
+    Mot *push = new Mot(plateau.getCase(10, 5), Word::PUSH, rules);
+    plateau.getCase(10, 5)->ajouterAgent(push);
+    agents.push_back(push);
 }
 
 bool Jeu::aDejaBouge(Agent *a)
@@ -111,110 +137,17 @@ void Jeu::supprimerDeDemandeur(Agent *a)
         demandeur.end());
 }
 
-/**
-On appelle recursivement sur tous les agents en direction de nv_direct et si un retourne false alors nous ne pouvons pas faire le déplacement
-car il y aura un obstacle (ou fin de map) et si c'est vrai alors nous bougeons tous les agents poussable dans la liste
-des cases sur le chemin */
-// bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
-// {
-//     // au cas ou mais impossible normalement car un joueur à toujours une case mais sécurité
-//     if (c != nullptr)
-//     {
-//         // check les booléans de ses agents sur la case
-//         // si ok appeler sur case cible
-//         // sinon false arret recursion;
-//         Case *cible = plateau.getCase(c->getX() + nv_direction.first, c->getY() + nv_direction.second);
-
-//         for (size_t i = 0; i < c->getAgents().size(); i++)
-//         {
-//             Agent *a = c->getAgents().at(i);
-//             /*si dans notre case actuelle ou les suivantes il y a un élément pas poussable*/
-//             if (a->isStop() && !(a->isYou()))
-//             {
-//                 cout << "is STOP or NOT YOU" << endl;
-//                 cout << toString(a->getType()) << endl;
-//                 return false;
-//             }
-
-//             // if ()
-//             // {
-//             //     cout << "is not YOU" << endl;
-//             //     cout << toString(a->getType()) << endl;
-//             //     return false;
-//             // }
-//         }
-
-//         if (cible != nullptr)
-//         {
-//             /*si la cible est vide ou contient uniquement des baba*/
-//             /*nos cas d'arrêts*/
-//             if (cible->getAgents().empty() || /*cible->containBaba_only() ||*/ cible->ToutSuperposable())
-//             {
-//                 for (size_t i = 0; i < c->getAgents().size(); i++)
-//                 {
-//                     // on déplace
-//                     Agent *a = c->getAgents().at(i);
-//                     /*si c'est poussable ou que c'est notre agent qu'on doit déplacer*/
-//                     /*TODO: est-ce que getBaba est vraiment utile ? si a==agent alors c'est forcément un baba ?*/
-//                     if (a->isPush() || (a->isYou() && a == agentjoueur))
-//                     {
-//                         a->setCaseActuelle(cible);
-//                         c->retirerAgent(a);
-//                         cible->ajouterAgent(a);
-//                     }
-//                 }
-//                 return true;
-//             }
-//             bool res = deplaceRec(nv_direction, cible, agentjoueur);
-//             if (res)
-//             {
-//                 for (size_t i = 0; i < c->getAgents().size(); i++)
-//                 {
-//                     // on déplace
-//                     Agent *a = c->getAgents().at(i);
-//                     if (a->isPush() || (a->isYou() && a == agentjoueur))
-//                     {
-//                         a->setCaseActuelle(cible);
-//                         c->retirerAgent(a);
-//                         cible->ajouterAgent(a);
-//                     }
-//                 }
-//                 return true; // on avait un petit probleme mais réglé ici en effet il faut retourner true seulement si res == true sinon false
-//             }
-//             else
-//             {
-//                 return false;
-//             }
-//         }
-//         else
-//         {
-//             // nous sommes arrivé aux bornes
-//             return false;
-//         }
-//     }
-//     // il n'est pas poussable
-//     return false;
-// }
-
 bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
 {
-    // au cas ou mais impossible normalement car un joueur à toujours une case mais sécurité
-
     if (!c)
         return false;
 
-    // check les booléans de ses agents sur la case
-    // si ok appeler sur case cible
-    // sinon false arret recursion;
     Case *cible = plateau.getCase(c->getX() + nv_direction.first, c->getY() + nv_direction.second);
     if (!cible)
         return false; // sortie du plateau
 
     for (Agent *a : cible->getAgents())
     {
-        //  Agent *a = c->getAgents().at(i);
-        /*si dans notre case actuelle ou les suivantes il y a un élément pas poussable*/
-
         if (a->isStop() && !(a->isYou()))
         {
             cout << "is STOP or NOT YOU" << endl;
@@ -223,24 +156,20 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
         }
     }
 
-    /*si la cible est vide ou contient uniquement des baba*/
-    /*nos cas d'arrêts*/
-
-    if (cible->getAgents().empty() || /*cible->containBaba_only() ||*/ cible->ToutSuperposable())
-    {
-        cout << "baba ou rien devant moi" << endl;
-        deplacerAgents(c, cible, agentjoueur);
-        return true;
-    }
-
     for (Agent *a : cible->getAgents())
     {
         if (aDejaBouge(a))
         {
-
             cout << "j'ai déja bougé" << endl;
             marqueCommeDemandeur(a);
         }
+    }
+
+    if (cible->getAgents().empty() || cible->ToutSuperposable())
+    {
+        cout << "baba ou rien devant moi" << endl;
+        deplacerAgents(c, cible, agentjoueur);
+        return true;
     }
 
     bool res = deplaceRec(nv_direction, cible, agentjoueur);
@@ -274,7 +203,6 @@ void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
         else if (!aDejaBouge(a) && !demandeuraDejaBouge() && a != demandeur)
         {
             cout << toString(a->getType()) << endl;
-
             cout << "je dois pas bouger car derriere il a déja bougé" << endl;
             continue;
         }
@@ -307,27 +235,6 @@ void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
 void Jeu::deplace(Direction d)
 {
     pair<int, int> nv_direction = directionToPair(d);
-    // if (d == Direction::Droite || d == Direction::Bas)
-    // {
-
-    //     vector<Agent *>::iterator it = joueur.end() - 1;
-    //     while (it != joueur.begin())
-    //     {
-    //         Case *courant = (*it)->getCaseActuelle();
-
-    //         deplaceRec(nv_direction, courant, *it);
-    //         it--;
-    //     }
-    //     if (it == joueur.begin())
-    //     {
-    //         Case *courant = (*it)->getCaseActuelle();
-
-    //         deplaceRec(nv_direction, courant, *it);
-    //     }
-    //     dejaBouges.clear();
-    // }
-    // else
-    // {
     vector<Agent *>::iterator it = joueur.begin();
     for (it = joueur.begin(); it != joueur.end(); ++it)
     {
@@ -341,25 +248,27 @@ void Jeu::deplace(Direction d)
         deplaceRec(nv_direction, courant, *it);
         demandeur.clear();
     }
-
-    // for (size_t i = 0; i < joueur.size(); i++)
-    // {
-    //     Agent &a = *(joueur.at(i));
-    //     if (aDejaBouge(&a))
-    //         continue;
-    //     Case *courant = a.getCaseActuelle();
-
-    //     cout << i << endl;
-
-    //     deplaceRec(nv_direction, courant, &a);
-    //     // deplacer liste
-    // }
     demandeur.clear();
     dejaBouges.clear();
-    //  }
 }
 
 const Plateau &Jeu::getPlateau() const
 {
     return plateau;
 }
+
+void Jeu::MajRegle() {
+    cout << "entrée dans majregle" << endl;
+    rules = plateau.parseRegle();
+    VerifJoueur();
+}
+
+void Jeu::VerifJoueur() {
+    joueur.clear();
+    for (Agent *a : agents){
+        if(a->isYou()) {
+            joueur.push_back(a);
+        }
+    }
+}
+

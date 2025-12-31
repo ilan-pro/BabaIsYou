@@ -2,6 +2,9 @@
 #define _PLATEAU
 
 #include "Case.hpp"
+#include "Regles.hpp"
+#include "Agent.hpp"
+#include "Mot.hpp"
 #include <vector>
 
 using namespace std;
@@ -25,15 +28,15 @@ public:
     /* Voir quoi faire pour les copies de vecteurs */
     Plateau(int largeur, int longueur);
     ~Plateau();
-    int getLargeur()const;
+    int getLargeur() const;
     int getLongueur() const;
     /**
-      * Ici le getter ne peut être constant car quand nous l'appelons nous sommes dans des fonctions susceptibles de 
-      * modifier l'état interne d'une case (i.e la liste des agents de la case)
-      */
-    Case* getCase(int i, int j);
+     * Ici le getter ne peut être constant car quand nous l'appelons nous sommes dans des fonctions susceptibles de
+     * modifier l'état interne d'une case (i.e la liste des agents de la case)
+     */
+    Case *getCase(int i, int j);
     /** celui pour la vue */
-    const Case* getCase(int i, int j) const;
+    const Case *getCase(int i, int j) const;
     /**
      * On à cases en constant et on veut un singleton du Plateau, on ne veut donc pas pouvoir réattribuer le Plateau
      * ni le copier
@@ -46,6 +49,11 @@ public:
      */
     void affichePlateau() const;
     Case &getCase(const Agent &a) const;
+
+    Regles parseRegle() const; 
+    const WordInfo *motPresentEtNom(const Case* c) const;
+    void VerifRule(const WordInfo& m_info, const Case *c, Regles &regles) const;
+    Mot* BonMotPresent(int i, int j, bool veutOperator) const;
 };
 
 #endif
