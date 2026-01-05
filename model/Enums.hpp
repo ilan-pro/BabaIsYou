@@ -10,7 +10,6 @@ check la propriéte et regarder la list de ObjectType qui possède
 cette proprité
 */
 
-
 enum class ObjectType
 {
     WATER,
@@ -19,9 +18,7 @@ enum class ObjectType
     WALL,
     FLAG,
     TEXT
-
 };
-
 
 enum class Property
 {

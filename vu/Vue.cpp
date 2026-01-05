@@ -5,52 +5,45 @@
 #include "../model/Rocher.hpp"
 #include "../model/Eau.hpp"
 
-Vue::Vue(sf::RenderWindow &win, Jeu &j)
-    : window(win), jeu(j)
+Vue::Vue(sf::RenderWindow &win, Jeu &j) : window(win), jeu(j)
 {
     chargerTextures();
 }
 
 void Vue::chargerTextures()
 {
-    textureLapin.loadFromFile("./ressource/rabbit.png");
-    textureMur.loadFromFile("./ressource/blanc.png");
-    textureRocher.loadFromFile("./ressource/roche.png");
-    textureEau.loadFromFile("./ressource/waves.png");
-    textureFlag.loadFromFile("./ressource/mur.png");
-    textureText.loadFromFile("./ressource/murs.png");
-    wordTextures[Word::BABA].loadFromFile("./ressource/text_baba.png");
-    wordTextures[Word::ROCK].loadFromFile("./ressource/text_rock.png");
-    wordTextures[Word::WALL].loadFromFile("./ressource/text_flag.png");
+    spriteSheet.loadFromFile("./ressource/spritesheet.png");
+    // un carré sur la sprite fait 8 pixels donc un baba donne 8*3
+    int affiche_tuile = 8*3;
+    rectsEntity[ObjectType::BABA] = sf::IntRect(0, 0, affiche_tuile, affiche_tuile);
+    rectsEntity[ObjectType::ROCK] = sf::IntRect(15*affiche_tuile, 22*affiche_tuile, affiche_tuile, affiche_tuile);
+    rectsEntity[ObjectType::WALL] = sf::IntRect(0, 57*affiche_tuile, affiche_tuile, affiche_tuile);
+    rectsEntity[ObjectType::WATER] = sf::IntRect(0, 49*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::BABA] = sf::IntRect(6*affiche_tuile, 27*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::ROCK] = sf::IntRect(11*affiche_tuile, 33*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::WALL] = sf::IntRect(27*affiche_tuile, 34*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::IS] = sf::IntRect(18*affiche_tuile, 32*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::YOU] = sf::IntRect(20*affiche_tuile, 42*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::STOP] = sf::IntRect(12*affiche_tuile, 42*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::PUSH] = sf::IntRect(2*affiche_tuile, 42*affiche_tuile, affiche_tuile, affiche_tuile);
+
 }
 
-
-sf::Texture &Vue::getTextureForAgent(Agent *a)
+sf::IntRect &Vue::getTextureForAgent(Agent *a)
 {
-    switch (a->getType())
-    {
-    case ObjectType::WATER:
-        return textureEau;
-    case ObjectType::BABA:
-        return textureLapin;
-    case ObjectType::ROCK:
-        return textureRocher;
-    case ObjectType::WALL:
-        return textureMur;
-    case ObjectType::FLAG:
-        return textureFlag;
-    case ObjectType::TEXT:
-         Mot* m = dynamic_cast<Mot*>(a);
-        if (m) return wordTextures[m->getWord()];
-        else return textureText;
-    default:
-        return textureLapin; // fallback
+    if(a->getType() == ObjectType::TEXT) {
+        Mot *m = dynamic_cast<Mot *>(a);
+        if(m){
+            return wordTextures[m->getWord()];
+        
+        }
     }
+    return rectsEntity[a->getType()];
 }
 
 void Vue::afficher()
 {
-    window.clear(sf::Color::White);
+    window.clear(sf::Color(15, 10, 25));
 
     const Plateau &plateau = jeu.getPlateau();
     for (int i = 0; i < plateau.getLongueur(); ++i)
@@ -61,16 +54,8 @@ void Vue::afficher()
             for (Agent *a : c->getAgents())
             {
                 sf::Sprite sprite;
-                sprite.setTexture(getTextureForAgent(a));
-
-                // sprite.setScale(sf::Vector2f(0.1, 0.1));
-
-                // sprite.setPosition(j * 32, i * 32);
-
-                float targetSize = 32.0f;
-                sf::Vector2u size = sprite.getTexture()->getSize();
-                sprite.setScale(targetSize / size.x, targetSize / size.y);
-                /* ICI les sprite utilise les vraies coordonnées trigo avec x : colonne et y : ligne (inverse de nous) */
+                sprite.setTexture(spriteSheet);
+                sprite.setTextureRect(getTextureForAgent(a));
                 sprite.setPosition(j * 32, i * 32); // taille case = 32px
                 window.draw(sprite);
             }
@@ -79,6 +64,4 @@ void Vue::afficher()
     window.display();
 }
 
-Vue::~Vue()
-{
-}
+Vue::~Vue() {}

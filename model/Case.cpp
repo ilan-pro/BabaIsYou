@@ -1,6 +1,6 @@
 #include "Case.hpp"
 #include "Agent.hpp"
-
+#include "Mot.hpp"
 #include <iostream>
 
 using namespace std;
@@ -11,15 +11,6 @@ Case::~Case()
 {
     // cout << "destruction de la Case" << endl;
 }
-
-// bool Case::containBaba_only() const {
-//     for(size_t i=0; i<agents.size(); i++) {
-//         if(!(agents.at(i)->getBaba())) {
-//             return false;
-//         }
-//     }
-//     return true;
-// }
 
 bool Case::ToutSuperposable() const
 {
@@ -138,19 +129,19 @@ ostream &operator<<(ostream &out, const Case &c)
     return out;
 }
 
-// const WordInfo *Case::motPresentEtNom() const
-// {
-//     for (Agent *a : getAgents())
-//     {
-//         if (a->getType() == ObjectType::TEXT)
-//         {
-//             Mot *m = dynamic_cast<Mot *>(a);
-//             if (m->isNoun())
-//             {
-//                 const WordInfo m_info = getWordInfo(m->getWord());
-//                 return &m_info;
-//             }
-//         }
-//     }
-//     return nullptr;
-// }
+const WordInfo *Case::motPresentEtNom() const
+{
+    for (Agent *a : getAgents())
+    {
+        if (a->getType() == ObjectType::TEXT)
+        {
+            Mot *m = dynamic_cast<Mot *>(a);
+            if (m->isNoun())
+            {
+                const WordInfo& m_info = getWordInfo(m->getWord());
+                return &m_info;
+            }
+        }
+    }
+    return nullptr;
+}

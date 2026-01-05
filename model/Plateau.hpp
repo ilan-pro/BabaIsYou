@@ -1,8 +1,8 @@
 #ifndef _PLATEAU
 #define _PLATEAU
 
-#include "Case.hpp"
 #include "Regles.hpp"
+#include "Case.hpp"
 #include "Agent.hpp"
 #include "Mot.hpp"
 #include <vector>
@@ -51,7 +51,6 @@ public:
     Case &getCase(const Agent &a) const;
 
     Regles parseRegle() const; 
-    const WordInfo *motPresentEtNom(const Case* c) const;
     void VerifRule(const WordInfo& m_info, const Case *c, Regles &regles) const;
     Mot* BonMotPresent(int i, int j, bool veutOperator) const;
 };

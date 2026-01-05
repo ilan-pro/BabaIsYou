@@ -6,14 +6,13 @@
 using namespace sf;
 
 int main()
-{ 
+{
     sf::RenderWindow window(sf::VideoMode(900, 900), "Test MVC");
-
-    Jeu jeu;                    // modèle
-    Controller controller(jeu); // contrôleur
-    Vue vue(window, jeu);       // vue
-
     sf::Event event;
+
+    Jeu jeu;
+    Controller controller(jeu);
+    Vue vue(window, jeu); 
 
     while (window.isOpen())
     {
@@ -21,15 +20,10 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-
             controller.gestionEvenement(event);
         }
-
-        // éventuellement jeu.update(); si tu simules les animaux
-
         vue.afficher();
         window.clear();
     }
-
     return EXIT_SUCCESS;
 }

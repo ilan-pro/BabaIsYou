@@ -61,23 +61,6 @@ int Plateau::getLargeur() const
     return Largeur;
 }
 
-const WordInfo* Plateau::motPresentEtNom(const Case* c) const
-{
-    for (Agent *a : c->getAgents())
-    {
-        if (a->getType() == ObjectType::TEXT)
-        {
-            Mot *m = dynamic_cast<Mot *>(a);
-            if (m->isNoun())
-            {
-                const WordInfo &m_info = getWordInfo(m->getWord());
-                return &m_info;
-            }
-        }
-    }
-    return nullptr;
-}
-
 Regles Plateau::parseRegle() const
 {
     Regles regles;
@@ -86,10 +69,9 @@ Regles Plateau::parseRegle() const
         for (int j = 0; j < Largeur - 2; j++)
         {
             const Case *c = getCase(i, j);
-            // const WordInfo *m_info = c->motPresentEtNom();
-            const WordInfo *m_info = motPresentEtNom(c);
-            // regles.VerifRule(*m_info, c, regles, *this);
+            const WordInfo *m_info = c->motPresentEtNom();
             if(m_info != nullptr) {
+                // regles.VerifRule(*m_info, c, regles, *this);
                 VerifRule(*m_info, c, regles);
             }
         }
