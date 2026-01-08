@@ -22,6 +22,9 @@ int main()
                 window.close();
             controller.gestionEvenement(event);
         }
+        if(jeu.closeWin) {
+            window.close();
+        }
         vue.afficher();
         window.clear();
     }

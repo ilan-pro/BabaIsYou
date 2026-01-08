@@ -14,7 +14,12 @@ class Lapin : public Agent
 private:
 public:
   Lapin(Case *caseInitiale, const Regles &rules);
+
+  Agent* clone() const ;
+
   ~Lapin();
 };
+
+
 
 #endif

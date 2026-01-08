@@ -12,7 +12,7 @@ using namespace std;
 class Plateau
 {
 private:
-    const int Largeur, Longueur;
+    int Largeur, Longueur;
     /**
      * on veut pouvoir changer l'état des cases mais pas le nombre (unique par niveau)
      * ATTENTION
@@ -26,7 +26,9 @@ private:
 
 public:
     /* Voir quoi faire pour les copies de vecteurs */
+    Plateau();
     Plateau(int largeur, int longueur);
+    Plateau(const Plateau &original, const std::vector<Agent *> &nouveauxAgents);
     ~Plateau();
     int getLargeur() const;
     int getLongueur() const;
@@ -42,7 +44,11 @@ public:
      * ni le copier
      */
     Plateau(const Plateau &plateau) = delete;
-    const Plateau &operator=(const Plateau &x) = delete;
+    // const Plateau &operator=(const Plateau &x) = delete;
+
+    const Plateau &operator=(const Plateau &x);
+
+    vector<Agent *> getAllAgents();
     /**
      * Ici on utilise un getter constant et pas un using class PlateauTerm; car cela casserait l'encapsulation
      * de la classe
@@ -50,9 +56,9 @@ public:
     void affichePlateau() const;
     Case &getCase(const Agent &a) const;
 
-    Regles parseRegle() const; 
-    void VerifRule(const WordInfo& m_info, const Case *c, Regles &regles) const;
-    Mot* BonMotPresent(int i, int j, bool veutOperator) const;
+    Regles parseRegle() const;
+    void VerifRule(const WordInfo &m_info, const Case *c, Regles &regles) const;
+    Mot *BonMotPresent(int i, int j, bool veutOperator) const;
 };
 
 #endif

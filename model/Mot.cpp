@@ -9,10 +9,11 @@ WordCategory Mot::category() const
     return getWordInfo(word).category;
 }
 
+Agent *Mot::clone() const
+{
+    return new Mot(*this);
+}
+
 bool Mot::isNoun() const { return category() == WordCategory::NOUN; }
 bool Mot::isOperator() const { return category() == WordCategory::OPERATOR; }
 bool Mot::isProperty() const { return category() == WordCategory::PROPERTY; }
-// bool Mot::isPush() const { return true;}
-// bool Mot::isStop() const { return false;}
-// bool Mot::isYou() const { return false;}
-// bool Mot::isWin() const { return false;}

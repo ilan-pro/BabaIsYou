@@ -87,15 +87,17 @@ void Regles::print() const
     RuleMap::const_iterator it;
     for (it = rules.begin(); it != rules.end(); ++it)
     {
-        std::cout << toString(it->first) << " : ";
+        // std::cout << toString(it->first) << " : ";
         const std::vector<ObjectType> &objs = it->second;
         for (std::size_t i = 0; i < objs.size(); ++i)
         {
-            std::cout << toString(objs[i]) << " ";
+            // std::cout << toString(objs[i]) << " ";
         }
-        std::cout << "\n";
+        // std::cout << "\n";
     }
 }
+
+Regles::~Regles(){}
 
 // void Regles::VerifRule(const WordInfo& m_info, const Case *c, Regles &regles, const Plateau& p) const
 // {

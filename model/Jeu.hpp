@@ -6,8 +6,10 @@
 #include "Direction.hpp"
 #include "Agent.hpp"
 #include "Regles.hpp"
+#include "EtatJeu.hpp"
 
 using namespace std;
+class EtatJeu;
 
 class Jeu
 {
@@ -26,8 +28,11 @@ private:
     Regles rules;
     vector<Agent *> dejaBouges;
     vector<Agent *> demandeur;
+    vector<EtatJeu *> undoStack;
+    vector<EtatJeu *> redoStack;
 
 public:
+    bool closeWin;
     Jeu();
     ~Jeu();
     void ajouterAgent(Agent *a);
@@ -41,8 +46,14 @@ public:
     void marqueCommeBouge(Agent *a);
     void marqueCommeDemandeur(Agent *a);
     const Plateau &getPlateau() const;
+    vector<Agent *> getAgents() const;
+    Regles getRule() const;
     void MajRegle();
     void VerifJoueur();
+    void sauvegarderEtat();
+    void redo();
+    void undo();
+    void restaurer(const EtatJeu *etat);
 };
 
 #endif

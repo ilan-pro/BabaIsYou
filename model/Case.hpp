@@ -12,8 +12,8 @@ class Case
 {
 private:
   vector<Agent *> agents; // pour les 0 à N agents sur la case
-  int const x;
-  int const y;
+   int x;
+   int y;
 
 public:
   Case(int x, int y);
@@ -34,6 +34,7 @@ public:
   // bool containBaba_only() const;
   /* vérifie qu'on à des éléments superposable comme l'eau OU si y a un BABA*/
   bool ToutSuperposable() const;
+  
 
   /**
    * on souhaite retourner un vector const c'est a dire non modifiable premier const pour la valeur de retour 2eme const pour nous assurer que la fonction ne modifie rien

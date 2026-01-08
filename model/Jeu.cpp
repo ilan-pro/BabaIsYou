@@ -5,8 +5,9 @@
 #include "Eau.hpp"
 #include "Mot.hpp"
 #include "Word.hpp"
+#include "Drapeau.hpp"
 
-Jeu::Jeu() : plateau(23, 23)
+Jeu::Jeu() : plateau(23, 23), closeWin{false} 
 {
     // Initialise les règles
     // rules.addRule(ObjectType::BABA, Property::YOU);
@@ -27,6 +28,10 @@ Jeu::~Jeu()
     // destruction propre des agents
     for (Agent *a : agents)
         delete a;
+    for (EtatJeu *e : undoStack)
+        delete e;
+    for (EtatJeu *e : redoStack)
+        delete e;
 }
 
 void Jeu::ajouterAgent(Agent *a)
@@ -51,6 +56,11 @@ void Jeu::initTestMap()
     plateau.getCase(4, 4)->ajouterAgent(l2);
     agents.push_back(l2);
     joueur.push_back(l2);
+
+    Drapeau *f = new Drapeau(plateau.getCase(8, 4), rules);
+    plateau.getCase(8, 4)->ajouterAgent(f);
+    agents.push_back(f);
+    joueur.push_back(f);
 
     // --- Rochers ---
     Rocher *r1 = new Rocher(plateau.getCase(0, 1), rules);
@@ -109,6 +119,19 @@ void Jeu::initTestMap()
     Mot *push = new Mot(plateau.getCase(10, 5), Word::PUSH, rules);
     plateau.getCase(10, 5)->ajouterAgent(push);
     agents.push_back(push);
+
+    // FLAG IS WIN
+    Mot *flag = new Mot(plateau.getCase(15, 3), Word::FLAG, rules);
+    plateau.getCase(15, 3)->ajouterAgent(flag);
+    agents.push_back(flag);
+
+    Mot *is4 = new Mot(plateau.getCase(15, 4), Word::IS, rules);
+    plateau.getCase(15, 4)->ajouterAgent(is4);
+    agents.push_back(is4);
+
+    Mot *win = new Mot(plateau.getCase(15, 5), Word::WIN, rules);
+    plateau.getCase(15, 5)->ajouterAgent(win);
+    agents.push_back(win);
 }
 
 bool Jeu::aDejaBouge(Agent *a)
@@ -150,8 +173,8 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
     {
         if (a->isStop() && !(a->isYou()))
         {
-            cout << "is STOP or NOT YOU" << endl;
-            cout << toString(a->getType()) << endl;
+            // cout << "is STOP or NOT YOU" << endl;
+            // cout << toString(a->getType()) << endl;
             return false;
         }
     }
@@ -160,14 +183,14 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
     {
         if (aDejaBouge(a))
         {
-            cout << "j'ai déja bougé" << endl;
+            // cout << "j'ai déja bougé" << endl;
             marqueCommeDemandeur(a);
         }
     }
 
     if (cible->getAgents().empty() || cible->ToutSuperposable())
     {
-        cout << "baba ou rien devant moi" << endl;
+        // cout << "baba ou rien devant moi" << endl;
         deplacerAgents(c, cible, agentjoueur);
         return true;
     }
@@ -176,7 +199,7 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
 
     if (res)
     {
-        cout << "rec" << endl;
+        // cout << "rec" << endl;
         deplacerAgents(c, cible, agentjoueur);
         return true;
     }
@@ -195,15 +218,15 @@ void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
     {
         if (aDejaBouge(a))
         {
-            cout << "a deja bougé" << endl;
+            // cout << "a deja bougé" << endl;
             supprimerDeDemandeur(a);
             continue;
         }
 
         else if (!aDejaBouge(a) && !demandeuraDejaBouge() && a != demandeur)
         {
-            cout << toString(a->getType()) << endl;
-            cout << "je dois pas bouger car derriere il a déja bougé" << endl;
+            // cout << toString(a->getType()) << endl;
+            // cout << "je dois pas bouger car derriere il a déja bougé" << endl;
             continue;
         }
 
@@ -211,14 +234,18 @@ void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
         {
             aDeplacer.clear();
             aDeplacer.push_back(a);
-            cout << "you se deplace" << endl;
+            // cout << "you se deplace" << endl;
             break;
         }
 
         else if (a->isPush())
         {
-            cout << "is push se déplace" << endl;
+            // cout << "is push se déplace" << endl;
             aDeplacer.push_back(a);
+        }
+        else if (a->isWin())
+        {
+            closeWin = true;
         }
     }
 
@@ -243,7 +270,7 @@ void Jeu::deplace(Direction d)
         {
             continue;
         }
-        cout << "prochain lapin" << endl;
+        // cout << "prochain lapin" << endl;
         Case *courant = (*it)->getCaseActuelle();
         deplaceRec(nv_direction, courant, *it);
         demandeur.clear();
@@ -257,18 +284,104 @@ const Plateau &Jeu::getPlateau() const
     return plateau;
 }
 
-void Jeu::MajRegle() {
-    cout << "entrée dans majregle" << endl;
+void Jeu::MajRegle()
+{
+    // cout << "entrée dans majregle" << endl;
     rules = plateau.parseRegle();
     VerifJoueur();
 }
 
-void Jeu::VerifJoueur() {
+void Jeu::VerifJoueur()
+{
     joueur.clear();
-    for (Agent *a : agents){
-        if(a->isYou()) {
+    for (Agent *a : agents)
+    {
+        if (a->isYou())
+        {
             joueur.push_back(a);
         }
     }
 }
 
+vector<Agent *> Jeu::getAgents() const
+{
+    return agents;
+}
+
+Regles Jeu::getRule() const
+{
+    return rules;
+}
+
+void Jeu::sauvegarderEtat()
+{
+    cout << "sauvegarderEtat" << endl;
+    EtatJeu *j = new EtatJeu(*this);
+
+    undoStack.push_back(j);
+
+    for (EtatJeu *e : redoStack)
+        delete e;
+    redoStack.clear();
+}
+
+void Jeu::undo()
+{
+    if (undoStack.empty())
+    {
+        cout << "undo vide" << endl;
+        return;
+    }
+    else
+    {
+        cout << "undo pas vide" << endl;
+
+        EtatJeu *j = new EtatJeu(*this);
+        redoStack.push_back(j);
+
+        EtatJeu *prev = undoStack.back();
+        undoStack.pop_back();
+
+        restaurer(prev);
+        delete prev;
+    }
+}
+
+void Jeu::redo()
+{
+    if (redoStack.empty())
+    {
+        cout << "redo empty" << endl;
+        return;
+    }
+    else
+    {
+        cout << " redo je suis pas vide" << endl;
+        EtatJeu *j = new EtatJeu(*this);
+
+        undoStack.push_back(j);
+
+        EtatJeu *next = redoStack.back();
+        redoStack.pop_back();
+
+        restaurer(next);
+        delete next;
+    }
+}
+
+void Jeu::restaurer(const EtatJeu *etat)
+{
+    for (Agent *a : agents)
+        delete a;
+    agents.clear();
+
+    for (Agent *a : etat->agents)
+    {
+        agents.push_back(a->clone());
+    }
+    VerifJoueur();
+
+    plateau = Plateau(etat->plateau, agents);
+
+    rules = etat->rules;
+}

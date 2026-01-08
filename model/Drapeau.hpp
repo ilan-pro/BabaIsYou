@@ -6,8 +6,9 @@ class Drapeau : public Agent
 {
 private:
 public:
-    string getName() const;
 
+    Drapeau(Case *caseInitiale, const Regles &rules);
+     Agent *clone() const;
     ~Drapeau();
 };
 

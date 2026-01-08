@@ -14,7 +14,7 @@ void Agent::setCaseActuelle(Case *nouvelleCase)
 
 Agent::~Agent()
 {
-    cout << "destruction de l'agent de nom :" << endl;
+    // cout << "destruction de l'agent de nom :" << endl;
 }
 
 ObjectType Agent::getType() const

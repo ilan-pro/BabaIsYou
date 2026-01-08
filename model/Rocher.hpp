@@ -7,6 +7,7 @@ class Rocher : public Agent
 private:
 public:
     Rocher(Case *caseActuelle, const Regles &rules);
+    Agent *clone() const;
     ~Rocher();
 };
 #endif

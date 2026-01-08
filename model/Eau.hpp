@@ -7,7 +7,8 @@ class Eau : public Agent
 private:
 public:
     Eau(Case *caseInitiale, const Regles &rules);
-    ~Eau();
+    Agent *clone() const;
+    virtual ~Eau();
 };
 
 #endif

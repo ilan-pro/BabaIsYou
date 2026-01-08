@@ -16,6 +16,7 @@ void Vue::chargerTextures()
     // un carré sur la sprite fait 8 pixels donc un baba donne 8*3
     int affiche_tuile = 8*3;
     rectsEntity[ObjectType::BABA] = sf::IntRect(0, 0, affiche_tuile, affiche_tuile);
+    rectsEntity[ObjectType::FLAG] = sf::IntRect(6*affiche_tuile, 17*affiche_tuile, affiche_tuile, affiche_tuile);
     rectsEntity[ObjectType::ROCK] = sf::IntRect(15*affiche_tuile, 22*affiche_tuile, affiche_tuile, affiche_tuile);
     rectsEntity[ObjectType::WALL] = sf::IntRect(0, 57*affiche_tuile, affiche_tuile, affiche_tuile);
     rectsEntity[ObjectType::WATER] = sf::IntRect(0, 49*affiche_tuile, affiche_tuile, affiche_tuile);
@@ -26,6 +27,10 @@ void Vue::chargerTextures()
     wordTextures[Word::YOU] = sf::IntRect(20*affiche_tuile, 42*affiche_tuile, affiche_tuile, affiche_tuile);
     wordTextures[Word::STOP] = sf::IntRect(12*affiche_tuile, 42*affiche_tuile, affiche_tuile, affiche_tuile);
     wordTextures[Word::PUSH] = sf::IntRect(2*affiche_tuile, 42*affiche_tuile, affiche_tuile, affiche_tuile);
+
+    wordTextures[Word::FLAG] = sf::IntRect(1*affiche_tuile, 30*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::WIN] = sf::IntRect(17*affiche_tuile, 0*affiche_tuile, affiche_tuile, affiche_tuile);
+    
 
 }
 

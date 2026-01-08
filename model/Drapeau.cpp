@@ -1,8 +1,12 @@
 #include "Drapeau.hpp"
 
-std::string Drapeau::getName() const
+Drapeau::Drapeau(Case *caseInitiale, const Regles &rules) : Agent(caseInitiale, ObjectType::FLAG, rules)
 {
-    return "Lapin";
+}
+
+Agent *Drapeau::clone() const
+{
+    return new Drapeau(*this);
 }
 
 Drapeau::~Drapeau()
