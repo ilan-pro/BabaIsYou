@@ -2,6 +2,7 @@
 #define _ENUMS_HPP
 
 #include <string>
+
 using namespace std;
 
 /*

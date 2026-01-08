@@ -1,12 +1,13 @@
 #ifndef _EAU
 #define _EAU
-#include "Agent.hpp"
+
+#include "../Agent.hpp"
 
 class Eau : public Agent
 {
 private:
 public:
-    Eau(Case *caseInitiale, const Regles &rules);
+    Eau(Case *caseInitiale, const Regles &regles);
     ~Eau();
 };
 

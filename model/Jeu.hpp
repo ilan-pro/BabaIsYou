@@ -4,7 +4,6 @@
 #include <vector>
 #include "Plateau.hpp"
 #include "Direction.hpp"
-#include "Agent.hpp"
 #include "Regles.hpp"
 
 using namespace std;
@@ -23,7 +22,7 @@ private:
      */
     vector<Agent *> agents;
     vector<Agent *> joueur;
-    Regles rules;
+    Regles regles;
     vector<Agent *> dejaBouges;
     vector<Agent *> demandeur;
 

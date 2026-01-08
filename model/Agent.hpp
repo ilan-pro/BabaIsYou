@@ -1,9 +1,9 @@
 #ifndef _AGENT
 #define _AGENT
-#include "Enums.hpp"
-#include "Regles.hpp"
-#include <string>
+
 #include <iostream>
+#include <string>
+#include "Regles.hpp"
 
 using namespace std;
 
@@ -14,7 +14,7 @@ class Agent
 protected:
     Case *caseActuelle;
     ObjectType type;
-    const Regles &rules;
+    const Regles &regles;
     /*
         ici on ne creer surtout pas de case avec new (pas de composition)
         Donc cela implique que dans le destructeur il ne faut surtout pas faire de delete Case
@@ -24,7 +24,7 @@ protected:
     // en protected car seul les classes dérievées doivent pouvoir y accéder
 
 public:
-    Agent(Case *caseActuelle, ObjectType type, const Regles &rules);
+    Agent(Case *caseActuelle, ObjectType type, const Regles &regles);
     virtual ObjectType getType() const;
     Case *getCaseActuelle() const;
     virtual void setCaseActuelle(Case *nouvelleCase);

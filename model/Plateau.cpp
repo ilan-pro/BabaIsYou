@@ -1,6 +1,5 @@
 #include "Plateau.hpp"
-#include "Word.hpp"
-#include <iostream>
+#include "Agent/Mot.hpp"
 
 using namespace std;
 
@@ -71,8 +70,8 @@ Regles Plateau::parseRegle() const
             const Case *c = getCase(i, j);
             const WordInfo *m_info = c->motPresentEtNom();
             if(m_info != nullptr) {
-                // regles.VerifRule(*m_info, c, regles, *this);
-                VerifRule(*m_info, c, regles);
+                regles.VerifRule(*m_info, c, regles, this);
+                // VerifRule(*m_info, c, regles);
             }
         }
     }
@@ -80,50 +79,50 @@ Regles Plateau::parseRegle() const
 }
 
 
-void Plateau::VerifRule(const WordInfo& m_info, const Case *c, Regles &regles) const
-{
-    int i = c->getX();
-    int j = c->getY();
-    Mot *operator1 = BonMotPresent(i, j + 1, true);
-    Mot *propriete1 = BonMotPresent(i, j + 2, false);
-    Mot *operator2 = BonMotPresent(i + 1, j, true);
-    Mot *propriete2 = BonMotPresent(i + 2, j, false);
-    if (operator1 != nullptr && propriete1 != nullptr)
-    {
-        const Word w = propriete1->getWord();
-        const WordInfo w1 = getWordInfo(w);
-        regles.addRule(m_info.object, w1.property);
-        regles.addRule(ObjectType::TEXT, Property::PUSH);
-    }
-    if (operator2 != nullptr && propriete2)
-    {
-        const Word w = propriete2->getWord();
-        const WordInfo w1 = getWordInfo(w);
-        regles.addRule(m_info.object, w1.property);
-        regles.addRule(ObjectType::TEXT, Property::PUSH);
-    }
-}
+// void Plateau::VerifRule(const WordInfo& m_info, const Case *c, Regles &regles) const
+// {
+//     int i = c->getX();
+//     int j = c->getY();
+//     Mot *operator1 = BonMotPresent(i, j + 1, true);
+//     Mot *propriete1 = BonMotPresent(i, j + 2, false);
+//     Mot *operator2 = BonMotPresent(i + 1, j, true);
+//     Mot *propriete2 = BonMotPresent(i + 2, j, false);
+//     if (operator1 != nullptr && propriete1 != nullptr)
+//     {
+//         const Word w = propriete1->getWord();
+//         const WordInfo w1 = getWordInfo(w);
+//         regles.addRule(m_info.object, w1.property);
+//         regles.addRule(ObjectType::TEXT, Property::PUSH);
+//     }
+//     if (operator2 != nullptr && propriete2)
+//     {
+//         const Word w = propriete2->getWord();
+//         const WordInfo w1 = getWordInfo(w);
+//         regles.addRule(m_info.object, w1.property);
+//         regles.addRule(ObjectType::TEXT, Property::PUSH);
+//     }
+// }
 
-Mot *Plateau::BonMotPresent(int i, int j, bool veutOperator) const
-{
-    /**
-     * pas besoin de vérifier j car la boucle va jusqu'à largeur-2
-     */
-    if(i < getLongueur()){
-        const Case *c = getCase(i, j);
-        for (Agent *a : c->getAgents())
-        {
-            if (a->getType() == ObjectType::TEXT)
-            {
-                Mot *m = dynamic_cast<Mot *>(a);
-                if (m->isOperator() && veutOperator)
-                {
-                    return m;
-                }else if(m->isProperty()) {
-                    return m;
-                }
-            }
-        }
-    }
-    return nullptr;
-}
+// Mot *Plateau::BonMotPresent(int i, int j, bool veutOperator) const
+// {
+//     /**
+//      * pas besoin de vérifier j car la boucle va jusqu'à largeur-2
+//      */
+//     if(i < getLongueur()){
+//         const Case *c = getCase(i, j);
+//         for (Agent *a : c->getAgents())
+//         {
+//             if (a->getType() == ObjectType::TEXT)
+//             {
+//                 Mot *m = dynamic_cast<Mot *>(a);
+//                 if (m->isOperator() && veutOperator)
+//                 {
+//                     return m;
+//                 }else if(m->isProperty()) {
+//                     return m;
+//                 }
+//             }
+//         }
+//     }
+//     return nullptr;
+// }

@@ -1,13 +1,14 @@
 #ifndef _PLATEAU
 #define _PLATEAU
 
-#include "Regles.hpp"
+#include <vector>
 #include "Case.hpp"
 #include "Agent.hpp"
-#include "Mot.hpp"
-#include <vector>
+#include "Regles.hpp"
 
 using namespace std;
+
+class Mot;
 
 class Plateau
 {
@@ -51,8 +52,8 @@ public:
     Case &getCase(const Agent &a) const;
 
     Regles parseRegle() const; 
-    void VerifRule(const WordInfo& m_info, const Case *c, Regles &regles) const;
-    Mot* BonMotPresent(int i, int j, bool veutOperator) const;
+    // void VerifRule(const WordInfo& m_info, const Case *c, Regles &regles) const;
+    // Mot* BonMotPresent(int i, int j, bool veutOperator) const;
 };
 
 #endif

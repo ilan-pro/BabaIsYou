@@ -1,13 +1,13 @@
 #ifndef _MUR
 #define _MUR
 
-#include "Agent.hpp"
+#include "../Agent.hpp"
 
 class Mur : public Agent
 {
 private:
 public:
-    Mur(Case *caseActuelle, const Regles &rules);
+    Mur(Case *caseActuelle, const Regles &regles);
     ~Mur();
 };
 

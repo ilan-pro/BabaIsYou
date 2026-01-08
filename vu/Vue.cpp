@@ -1,9 +1,10 @@
 #include "Vue.hpp"
 
-#include "../model/Lapin.hpp"
-#include "../model/Mur.hpp"
-#include "../model/Rocher.hpp"
-#include "../model/Eau.hpp"
+#include "../model/Agent/Lapin.hpp"
+#include "../model/Agent/Mur.hpp"
+#include "../model/Agent/Rocher.hpp"
+#include "../model/Agent/Eau.hpp"
+#include "../model/Agent/Mot.hpp"
 
 Vue::Vue(sf::RenderWindow &win, Jeu &j) : window(win), jeu(j)
 {

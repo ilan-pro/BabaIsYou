@@ -29,7 +29,7 @@ enum class Property;
 
 /*
 on creer cette structure pour avoir l'information de quelle mots il s'agit, a quelle catégorie il appartient 
-et on lui associe le bon ObjectYpe ou Property pour pouvoir l'ajouter dans les rules 
+et on lui associe le bon ObjectYpe ou Property pour pouvoir l'ajouter dans les regles 
 */
 
 

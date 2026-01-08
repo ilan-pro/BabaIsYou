@@ -1,7 +1,6 @@
 #include "Case.hpp"
 #include "Agent.hpp"
-#include "Mot.hpp"
-#include <iostream>
+#include "Agent/Mot.hpp"
 
 using namespace std;
 
@@ -37,19 +36,6 @@ void Case::ajouterAgent(Agent *a)
     agents.push_back(a);
 }
 
-// void Case::retirerAgent(Agent *a)
-// {
-//     for (size_t i = 0; i < agents.size(); i++)
-//     {
-//         if (agents.at(i) == a)
-//         {
-//             agents.erase(agents.begin() + i);
-//             cout << "retirer agents de listeagents dans Case" << endl;
-//             return;
-//         }
-//     }
-// }
-
 /*
 Pour gérer les problemes de suppressions dans
 un vector
@@ -57,8 +43,6 @@ un vector
 Soit avec un itérator on fait pointer it vers erase puisque erase renvoie le nouvel itérateur suivant
 
 Soit soit on fait une copie des objet dans un nouveau vector dans lequel on va supprimer tous ces éléments
-
-
 */
 
 void Case::retirerAgent(Agent *a)

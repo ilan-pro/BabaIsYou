@@ -1,8 +1,6 @@
 #ifndef _MOUVEMENT
 #define _MOUVEMENT
 
-#include "Agent.hpp"
-#include "Plateau.hpp"
 #include "Direction.hpp"
 
 using namespace std;

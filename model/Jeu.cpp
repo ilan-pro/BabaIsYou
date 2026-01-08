@@ -1,25 +1,26 @@
 #include "Jeu.hpp"
-#include "Lapin.hpp"
-#include "Rocher.hpp"
-#include "Mur.hpp"
-#include "Eau.hpp"
-#include "Mot.hpp"
+#include "Agent.hpp"
+#include "Agent/Lapin.hpp"
+#include "Agent/Rocher.hpp"
+#include "Agent/Mur.hpp"
+#include "Agent/Eau.hpp"
+#include "Agent/Mot.hpp"
 #include "Word.hpp"
 
 Jeu::Jeu() : plateau(23, 23)
 {
     // Initialise les règles
-    // rules.addRule(ObjectType::BABA, Property::YOU);
-    // rules.addRule(ObjectType::ROCK, Property::PUSH);
-    // rules.addRule(ObjectType::WALL, Property::STOP);
-    // rules.addRule(ObjectType::FLAG, Property::WIN);
-    // rules.addRule(ObjectType::BABA, Property::STOP);
-    // // rules.addRule(ObjectType::BABA, Property::PUSH);
-    // rules.addRule(ObjectType::TEXT, Property::PUSH);
+    // regles.addRule(ObjectType::BABA, Property::YOU);
+    // regles.addRule(ObjectType::ROCK, Property::PUSH);
+    // regles.addRule(ObjectType::WALL, Property::STOP);
+    // regles.addRule(ObjectType::FLAG, Property::WIN);
+    // regles.addRule(ObjectType::BABA, Property::STOP);
+    // // regles.addRule(ObjectType::BABA, Property::PUSH);
+    // regles.addRule(ObjectType::TEXT, Property::PUSH);
 
     // Initialise la map de test
     initTestMap();
-    rules.print();
+    regles.print();
 }
 
 Jeu::~Jeu()
@@ -37,76 +38,76 @@ void Jeu::ajouterAgent(Agent *a)
 void Jeu::initTestMap()
 {
     // --- Lapins ---
-    Lapin *l0 = new Lapin(plateau.getCase(4, 4), rules);
+    Lapin *l0 = new Lapin(plateau.getCase(4, 4), regles);
     plateau.getCase(4, 4)->ajouterAgent(l0);
     agents.push_back(l0);
     joueur.push_back(l0);
 
-    Lapin *l1 = new Lapin(plateau.getCase(4, 4), rules);
+    Lapin *l1 = new Lapin(plateau.getCase(4, 4), regles);
     plateau.getCase(4, 4)->ajouterAgent(l1);
     agents.push_back(l1);
     joueur.push_back(l1);
 
-    Lapin *l2 = new Lapin(plateau.getCase(4, 4), rules);
+    Lapin *l2 = new Lapin(plateau.getCase(4, 4), regles);
     plateau.getCase(4, 4)->ajouterAgent(l2);
     agents.push_back(l2);
     joueur.push_back(l2);
 
     // --- Rochers ---
-    Rocher *r1 = new Rocher(plateau.getCase(0, 1), rules);
+    Rocher *r1 = new Rocher(plateau.getCase(0, 1), regles);
     plateau.getCase(0, 1)->ajouterAgent(r1);
     agents.push_back(r1);
 
-    Rocher *r2 = new Rocher(plateau.getCase(0, 2), rules);
+    Rocher *r2 = new Rocher(plateau.getCase(0, 2), regles);
     plateau.getCase(0, 2)->ajouterAgent(r2);
     agents.push_back(r2);
 
     // --- Mur ---
-    Mur *m = new Mur(plateau.getCase(1, 7), rules);
+    Mur *m = new Mur(plateau.getCase(1, 7), regles);
     plateau.getCase(1, 7)->ajouterAgent(m);
     agents.push_back(m);
 
     // --- Eau ---
-    Eau *e = new Eau(plateau.getCase(1, 5), rules);
+    Eau *e = new Eau(plateau.getCase(1, 5), regles);
     plateau.getCase(1, 5)->ajouterAgent(e);
     agents.push_back(e);
 
     // BABA IS YOU
-    Mot *baba = new Mot(plateau.getCase(4, 5), Word::BABA, rules);
+    Mot *baba = new Mot(plateau.getCase(4, 5), Word::BABA, regles);
     plateau.getCase(4, 5)->ajouterAgent(baba);
     agents.push_back(baba);
 
-    Mot *is = new Mot(plateau.getCase(4, 6), Word::IS, rules);
+    Mot *is = new Mot(plateau.getCase(4, 6), Word::IS, regles);
     plateau.getCase(4, 6)->ajouterAgent(is);
     agents.push_back(is);
 
-    Mot *you = new Mot(plateau.getCase(4, 7), Word::YOU, rules);
+    Mot *you = new Mot(plateau.getCase(4, 7), Word::YOU, regles);
     plateau.getCase(4, 7)->ajouterAgent(you);
     agents.push_back(you);
 
     // WALL IS STOP
-    Mot *wall = new Mot(plateau.getCase(7, 7), Word::WALL, rules);
+    Mot *wall = new Mot(plateau.getCase(7, 7), Word::WALL, regles);
     plateau.getCase(7, 7)->ajouterAgent(wall);
     agents.push_back(wall);
 
-    Mot *is2 = new Mot(plateau.getCase(7, 8), Word::IS, rules);
+    Mot *is2 = new Mot(plateau.getCase(7, 8), Word::IS, regles);
     plateau.getCase(7, 8)->ajouterAgent(is2);
     agents.push_back(is2);
 
-    Mot *stop = new Mot(plateau.getCase(7, 9), Word::STOP, rules);
+    Mot *stop = new Mot(plateau.getCase(7, 9), Word::STOP, regles);
     plateau.getCase(7, 9)->ajouterAgent(stop);
     agents.push_back(stop);
 
     // ROCK IS PUSH
-    Mot *rock = new Mot(plateau.getCase(10, 3), Word::ROCK, rules);
+    Mot *rock = new Mot(plateau.getCase(10, 3), Word::ROCK, regles);
     plateau.getCase(10, 3)->ajouterAgent(rock);
     agents.push_back(rock);
 
-    Mot *is3 = new Mot(plateau.getCase(10, 4), Word::IS, rules);
+    Mot *is3 = new Mot(plateau.getCase(10, 4), Word::IS, regles);
     plateau.getCase(10, 4)->ajouterAgent(is3);
     agents.push_back(is3);
 
-    Mot *push = new Mot(plateau.getCase(10, 5), Word::PUSH, rules);
+    Mot *push = new Mot(plateau.getCase(10, 5), Word::PUSH, regles);
     plateau.getCase(10, 5)->ajouterAgent(push);
     agents.push_back(push);
 }
@@ -259,7 +260,7 @@ const Plateau &Jeu::getPlateau() const
 
 void Jeu::MajRegle() {
     cout << "entrée dans majregle" << endl;
-    rules = plateau.parseRegle();
+    regles = plateau.parseRegle();
     VerifJoueur();
 }
 

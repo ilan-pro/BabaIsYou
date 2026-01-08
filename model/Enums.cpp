@@ -1,11 +1,9 @@
 #include "Enums.hpp"
 
-/*
-
-Fonctions pour debug dans la map et voir quelles sont les
-regles présentent
-
-*/
+/** 
+ * Fonctions pour debug dans la map et voir quelles sont les
+ * regles présentent
+ */
 string toString(ObjectType obj)
 {
     switch (obj)

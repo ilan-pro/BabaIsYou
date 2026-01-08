@@ -1,5 +1,7 @@
 #include "Direction.hpp"
 
+using namespace std;
+
 
 pair<int, int> directionToPair(Direction d)
 {

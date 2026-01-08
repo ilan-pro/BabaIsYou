@@ -1,8 +1,6 @@
 #ifndef _DIRECTION
 #define _DIRECTION
 
-using namespace std;
-
 #include <utility>
 
 enum class Direction
@@ -13,6 +11,6 @@ enum class Direction
     Bas,
 };
 
-pair<int, int> directionToPair(Direction d);
+std::pair<int, int> directionToPair(Direction d);
 
 #endif

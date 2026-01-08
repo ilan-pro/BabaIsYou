@@ -1,4 +1,6 @@
 #include "Mouvement.hpp"
+#include "Agent.hpp"
+#include "Plateau.hpp"
 
 pair<int, int> Mouvement::directionToPair(Direction d)
 {
