@@ -2,4 +2,11 @@
 
 Mur::Mur(Case *caseActuelle, const Regles &regles) : Agent(caseActuelle, ObjectType::WALL, regles) {}
 
-Mur::~Mur() {}
+Agent *Mur::clone() const
+{
+    return new Mur(*this);
+}
+
+Mur::~Mur()
+{
+}

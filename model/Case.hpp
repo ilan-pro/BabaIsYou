@@ -1,5 +1,6 @@
 #ifndef _CASE
 #define _CASE
+
 #include <vector>
 #include <iostream>
 #include "Word.hpp"
@@ -11,9 +12,9 @@ class Agent;
 class Case
 {
 private:
-    vector<Agent *> agents; // pour les 0 à N agents sur la case
-    int const x;
-    int const y;
+  vector<Agent *> agents; // pour les 0 à N agents sur la case
+   int x;
+   int y;
 
 public:
     Case(int x, int y);

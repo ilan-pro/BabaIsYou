@@ -15,6 +15,8 @@ public:
 
     WordCategory category() const;
 
+    Agent *clone() const;
+
     bool isNoun() const;
     bool isOperator() const;
     bool isProperty() const;

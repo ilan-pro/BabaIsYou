@@ -8,6 +8,7 @@ class Mur : public Agent
 private:
 public:
     Mur(Case *caseActuelle, const Regles &regles);
+    Agent *clone() const;
     ~Mur();
 };
 

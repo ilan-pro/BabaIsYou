@@ -6,31 +6,53 @@
 #include "../model/Agent/Eau.hpp"
 #include "../model/Agent/Mot.hpp"
 
-Vue::Vue(sf::RenderWindow &win, Jeu &j) : window(win), jeu(j)
+using namespace sf;
+
+Vue::Vue(RenderWindow &win, Jeu &j) : window(win), jeu(j)
 {
+    initView();
     chargerTextures();
+}
+
+void Vue::initView() {
+    int worldWidth  = jeu.getPlateau().getLargeur()  * 32;
+    int worldHeight = jeu.getPlateau().getLongueur() * 32;
+
+    view.setSize(worldWidth, worldHeight);
+    view.setCenter(worldWidth / 2.0, worldHeight / 2.0);
+    // view.zoom(2.f);
+
+    window.setView(view);
+    window.clear(Color(15, 10, 25));
 }
 
 void Vue::chargerTextures()
 {
     spriteSheet.loadFromFile("./ressource/spritesheet.png");
+
     // un carré sur la sprite fait 8 pixels donc un baba donne 8*3
     int affiche_tuile = 8*3;
-    rectsEntity[ObjectType::BABA] = sf::IntRect(0, 0, affiche_tuile, affiche_tuile);
-    rectsEntity[ObjectType::ROCK] = sf::IntRect(15*affiche_tuile, 22*affiche_tuile, affiche_tuile, affiche_tuile);
-    rectsEntity[ObjectType::WALL] = sf::IntRect(0, 57*affiche_tuile, affiche_tuile, affiche_tuile);
-    rectsEntity[ObjectType::WATER] = sf::IntRect(0, 49*affiche_tuile, affiche_tuile, affiche_tuile);
-    wordTextures[Word::BABA] = sf::IntRect(6*affiche_tuile, 27*affiche_tuile, affiche_tuile, affiche_tuile);
-    wordTextures[Word::ROCK] = sf::IntRect(11*affiche_tuile, 33*affiche_tuile, affiche_tuile, affiche_tuile);
-    wordTextures[Word::WALL] = sf::IntRect(27*affiche_tuile, 34*affiche_tuile, affiche_tuile, affiche_tuile);
-    wordTextures[Word::IS] = sf::IntRect(18*affiche_tuile, 32*affiche_tuile, affiche_tuile, affiche_tuile);
-    wordTextures[Word::YOU] = sf::IntRect(20*affiche_tuile, 42*affiche_tuile, affiche_tuile, affiche_tuile);
-    wordTextures[Word::STOP] = sf::IntRect(12*affiche_tuile, 42*affiche_tuile, affiche_tuile, affiche_tuile);
-    wordTextures[Word::PUSH] = sf::IntRect(2*affiche_tuile, 42*affiche_tuile, affiche_tuile, affiche_tuile);
+    
+    rectsEntity[ObjectType::BABA] = IntRect(0, 0, affiche_tuile, affiche_tuile);
+    rectsEntity[ObjectType::FLAG] = IntRect(6*affiche_tuile, 23*affiche_tuile, affiche_tuile, affiche_tuile);
+    rectsEntity[ObjectType::ROCK] = IntRect(15*affiche_tuile, 22*affiche_tuile, affiche_tuile, affiche_tuile);
+    rectsEntity[ObjectType::WALL] = IntRect(0, 57*affiche_tuile, affiche_tuile, affiche_tuile);
+    rectsEntity[ObjectType::WATER] = IntRect(0, 49*affiche_tuile, affiche_tuile, affiche_tuile);
 
+    wordTextures[Word::BABA] = IntRect(6*affiche_tuile, 27*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::ROCK] = IntRect(11*affiche_tuile, 33*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::WALL] = IntRect(27*affiche_tuile, 34*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::IS] = IntRect(18*affiche_tuile, 32*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::YOU] = IntRect(20*affiche_tuile, 42*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::STOP] = IntRect(12*affiche_tuile, 42*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::PUSH] = IntRect(2*affiche_tuile, 42*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::FLAG] = IntRect(1*affiche_tuile, 30*affiche_tuile, affiche_tuile, affiche_tuile);
+    wordTextures[Word::WIN] = IntRect(17*affiche_tuile, 44*affiche_tuile, affiche_tuile, affiche_tuile);
 }
 
-sf::IntRect &Vue::getTextureForAgent(Agent *a)
+Vue::~Vue() {}
+
+IntRect &Vue::getTextureForAgent(Agent *a)
 {
     if(a->getType() == ObjectType::TEXT) {
         Mot *m = dynamic_cast<Mot *>(a);
@@ -42,10 +64,10 @@ sf::IntRect &Vue::getTextureForAgent(Agent *a)
     return rectsEntity[a->getType()];
 }
 
+
+
 void Vue::afficher()
 {
-    window.clear(sf::Color(15, 10, 25));
-
     const Plateau &plateau = jeu.getPlateau();
     for (int i = 0; i < plateau.getLongueur(); ++i)
     {
@@ -54,7 +76,7 @@ void Vue::afficher()
             const Case *c = plateau.getCase(i, j);
             for (Agent *a : c->getAgents())
             {
-                sf::Sprite sprite;
+                Sprite sprite;
                 sprite.setTexture(spriteSheet);
                 sprite.setTextureRect(getTextureForAgent(a));
                 sprite.setPosition(j * 32, i * 32); // taille case = 32px
@@ -64,5 +86,3 @@ void Vue::afficher()
     }
     window.display();
 }
-
-Vue::~Vue() {}

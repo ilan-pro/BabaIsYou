@@ -3,6 +3,11 @@
 
 using namespace std;
 
+
+Plateau::Plateau() : cases() {
+    
+}
+
 Plateau::Plateau(int largeur, int longueur) : Largeur{largeur}, Longueur{longueur}, cases(Longueur)
 {
     // cases.reserve(longueur);
@@ -15,6 +20,76 @@ Plateau::Plateau(int largeur, int longueur) : Largeur{largeur}, Longueur{longueu
         }
     }
 }
+
+Plateau::Plateau(const Plateau &original, const std::vector<Agent *> &nouveauxAgents)
+    : Largeur(original.getLargeur()), Longueur(original.getLongueur())
+{
+    for (int i = 0; i < Longueur; i++)
+    {
+        std::vector<Case> ligne;
+        ligne.reserve(Largeur);
+        for (int j = 0; j < Largeur; j++)
+        {
+            ligne.emplace_back(i, j);
+        }
+        cases.push_back(std::move(ligne));
+    }
+
+    for (Agent *a : nouveauxAgents)
+    {
+        int x = a->getCaseActuelle()->getX();
+        int y = a->getCaseActuelle()->getY();
+        cases[x][y].ajouterAgent(a);
+    }
+}
+
+// Plateau::Plateau(const Plateau &original, const std::vector<Agent *> &nouveauxAgents)
+//     : Largeur(original.Largeur), Longueur(original.Longueur)
+// {
+//     // Copier les cases
+//     cases.resize(Largeur);
+//     for (int i = 0; i < Largeur; ++i) {
+//         cases[i].resize(Longueur);
+//         for (int j = 0; j < Longueur; ++j) {
+//             cases[i][j] = original.cases[i][j]; // copie des Case (si Case est copiable)
+//             cases[i][j].setAgents(nouveauxAgents); // remplace les agents par les nouveaux clones
+//         }
+//     }
+// }
+
+const Plateau &Plateau::operator=(const Plateau &other)
+{
+    if (this != &other)
+    {
+        Largeur = other.Largeur;
+        Longueur = other.Longueur;
+        cases = other.cases;
+    }
+    return *this;
+}
+
+vector<Agent *> Plateau::getAllAgents()
+{
+    vector<Agent *> allAgents;
+
+    // Parcours de toutes les cases
+    for (int i = 0; i < Longueur; ++i)
+    {
+        for (int j = 0; j < Largeur; ++j)
+        {
+            Case &c = cases[i][j];
+            const vector<Agent *> &agentsInCase = c.getAgents();
+            allAgents.insert(allAgents.end(), agentsInCase.begin(), agentsInCase.end());
+        }
+    }
+
+    return allAgents;
+}
+
+// const Plateau &Plateau::operator=(const Plateau &x)
+// {
+//     return x;
+// }
 
 Case *Plateau::getCase(int i, int j)
 {
@@ -36,7 +111,7 @@ const Case *Plateau::getCase(int i, int j) const
 
 Plateau::~Plateau()
 {
-    cout << "destruction du plateau" << endl;
+    // cout << "destruction du plateau" << endl;
 }
 
 void Plateau::affichePlateau() const
@@ -45,7 +120,7 @@ void Plateau::affichePlateau() const
     {
         for (int j = 0; j < Largeur; j++)
         {
-            cout << '[' << i << ']' << '[' << j << ']' << " liste d'agents : " << cases[i][j] << endl;
+            // cout << '[' << i << ']' << '[' << j << ']' << " liste d'agents : " << cases[i][j] << endl;
         }
     }
 }

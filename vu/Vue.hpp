@@ -10,6 +10,7 @@ class Vue
 private:
     sf::RenderWindow &window; // référence à la fenêtre SFML
     Jeu &jeu;
+    sf::View view;
     sf::Texture spriteSheet;
     std::map<ObjectType, sf::IntRect> rectsEntity;
     sf::Texture textureLapin;
@@ -22,6 +23,7 @@ private:
 
 public:
     Vue(sf::RenderWindow &win, Jeu &j);
+    void initView();
     sf::IntRect &getTextureForAgent(Agent *a);
     void chargerTextures();
     void afficher();

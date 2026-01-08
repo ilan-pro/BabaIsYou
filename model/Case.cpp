@@ -29,7 +29,7 @@ void Case::ajouterAgent(Agent *a)
     {
         if (agents[i] == a)
         {
-            cout << "présence de doublons" << endl;
+            // cout << "présence de doublons" << endl;
             return;
         }
     }
@@ -92,14 +92,14 @@ void Case::afficherAgents() const
 {
     if (agents.size() == 0)
     {
-        cout << "vide";
+        // cout << "vide";
     }
     else
     {
         for (size_t i = 0; i < agents.size(); i++)
         {
             // ici on à include le header de agent donc on peut
-            cout << '[' << toString(agents.at(i)->getType()) << ']';
+            // cout << '[' << toString(agents.at(i)->getType()) << ']';
         }
     }
 }

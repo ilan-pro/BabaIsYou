@@ -2,4 +2,11 @@
 
 Rocher::Rocher(Case *caseActuelle, const Regles &regles) : Agent(caseActuelle, ObjectType::ROCK, regles) {}
 
-Rocher::~Rocher() {}
+Agent *Rocher::clone() const
+{
+    return new Rocher(*this);
+}
+
+Rocher::~Rocher()
+{
+}

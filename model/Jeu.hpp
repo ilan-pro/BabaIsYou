@@ -4,9 +4,11 @@
 #include <vector>
 #include "Plateau.hpp"
 #include "Direction.hpp"
-#include "Regles.hpp"
+#include "EtatJeu.hpp"
 
 using namespace std;
+
+class EtatJeu;
 
 class Jeu
 {
@@ -25,8 +27,11 @@ private:
     Regles regles;
     vector<Agent *> dejaBouges;
     vector<Agent *> demandeur;
+    vector<EtatJeu *> undoStack;
+    vector<EtatJeu *> redoStack;
 
 public:
+    bool closeWin;
     Jeu();
     ~Jeu();
     void ajouterAgent(Agent *a);
@@ -34,14 +39,23 @@ public:
     void supprimerDeDemandeur(Agent *a);
     bool deplaceRec(pair<int, int> nv_direction, Case *c, Agent *joueur);
     void deplacerAgents(Case *src, Case *dst, Agent *demandeur);
+    template<typename T>
+    T* spawnAgent(int x, int y, bool estJoueur);
+    Mot* spawnMot(int x, int y, Word w);
     void deplace(Direction d);
     bool aDejaBouge(Agent *a);
     bool demandeuraDejaBouge();
     void marqueCommeBouge(Agent *a);
     void marqueCommeDemandeur(Agent *a);
     const Plateau &getPlateau() const;
+    vector<Agent *> getAgents() const;
+    Regles getRule() const;
     void MajRegle();
     void VerifJoueur();
+    void sauvegarderEtat();
+    void redo();
+    void undo();
+    void restaurer(const EtatJeu *etat);
 };
 
 #endif

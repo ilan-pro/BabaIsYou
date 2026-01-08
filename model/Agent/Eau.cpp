@@ -1,5 +1,14 @@
 #include "Eau.hpp"
 
-Eau::Eau(Case *caseInitiale, const Regles &regles) : Agent(caseInitiale, ObjectType::WATER, regles) {}
+Eau::Eau(Case *caseInitiale, const Regles &regles) : Agent(caseInitiale, ObjectType::WATER, regles)
+{
+}
 
-Eau::~Eau() {}
+Agent *Eau::clone() const
+{
+    return new Eau(*this);
+}
+
+Eau::~Eau()
+{
+}

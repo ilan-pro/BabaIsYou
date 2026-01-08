@@ -30,6 +30,9 @@ public:
     virtual void setCaseActuelle(Case *nouvelleCase);
     /*il faut mettre virtual car le type change pour la recherche dans la map*/
 
+    
+     virtual Agent* clone() const = 0;
+
  
 
     virtual bool isPush() const;

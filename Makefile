@@ -1,4 +1,4 @@
-CPP = g++ -Wall -std=c++11 -fno-elide-constructors
+CPP = g++ -Wall -std=c++11 -g -fno-elide-constructors
 GRAPH = -lsfml-graphics -lsfml-window -lsfml-system
 
 MODEL_DIR = model
@@ -35,7 +35,10 @@ $(VIEW_DIR)/%.o: $(VIEW_DIR)/%.cpp
 
 # mettre run ici si on ne veut pas que Make voit la cible directement et l'éxécute tout le temps 	
 run: $(TARGET)
-	./$(TARGET) 
+	./$(TARGET)
+
+valgrind: $(TARGET)
+	valgrind --leak-check=full --show-leak-kinds=definite ./$(TARGET)
 
 clean:
 	rm -f baba_is_you $(MODEL_OBJ) $(MODEL_AGENT_OBJ) $(CTRL_OBJ) $(VIEW_OBJ) $(TARGET) 

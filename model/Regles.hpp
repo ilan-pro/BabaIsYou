@@ -40,6 +40,8 @@ public:
     */
     void print() const;
 
+    ~Regles();
+
     /**
      * Fonction qui permet de vérifier si une règle est bien formé et l'ajout si c'est le cas
      * on appelle ces fonctions uniquement depuis plateau donc l'attribut plateau est évidemment != nullptr

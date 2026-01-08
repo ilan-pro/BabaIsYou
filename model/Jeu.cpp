@@ -5,20 +5,11 @@
 #include "Agent/Mur.hpp"
 #include "Agent/Eau.hpp"
 #include "Agent/Mot.hpp"
+#include "Agent/Drapeau.hpp"
 #include "Word.hpp"
 
-Jeu::Jeu() : plateau(23, 23)
+Jeu::Jeu() : plateau(27, 22), closeWin{false} 
 {
-    // Initialise les règles
-    // regles.addRule(ObjectType::BABA, Property::YOU);
-    // regles.addRule(ObjectType::ROCK, Property::PUSH);
-    // regles.addRule(ObjectType::WALL, Property::STOP);
-    // regles.addRule(ObjectType::FLAG, Property::WIN);
-    // regles.addRule(ObjectType::BABA, Property::STOP);
-    // // regles.addRule(ObjectType::BABA, Property::PUSH);
-    // regles.addRule(ObjectType::TEXT, Property::PUSH);
-
-    // Initialise la map de test
     initTestMap();
     regles.print();
 }
@@ -26,8 +17,15 @@ Jeu::Jeu() : plateau(23, 23)
 Jeu::~Jeu()
 {
     // destruction propre des agents
-    for (Agent *a : agents)
+    for (Agent *a : agents){
         delete a;
+    }
+    for (EtatJeu *e : undoStack){
+        delete e;
+    }
+    for (EtatJeu *e : redoStack){
+        delete e;
+    }
 }
 
 void Jeu::ajouterAgent(Agent *a)
@@ -35,81 +33,61 @@ void Jeu::ajouterAgent(Agent *a)
     agents.push_back(a);
 }
 
+template<typename T>
+T* Jeu::spawnAgent(int x, int y, bool estJoueur)
+{
+    Case* c = plateau.getCase(x, y);
+    T* a = new T(c, regles);
+    c->ajouterAgent(a);
+    agents.push_back(a);
+    if(estJoueur) {
+        joueur.push_back(a);
+    }
+    return a;
+}
+
+Mot* Jeu::spawnMot(int x, int y, Word w)
+{
+    Case* c = plateau.getCase(x, y);
+    Mot* a = new Mot(c, w, regles);
+    c->ajouterAgent(a);
+    agents.push_back(a);
+    return a;
+}
+
+
 void Jeu::initTestMap()
 {
-    // --- Lapins ---
-    Lapin *l0 = new Lapin(plateau.getCase(4, 4), regles);
-    plateau.getCase(4, 4)->ajouterAgent(l0);
-    agents.push_back(l0);
-    joueur.push_back(l0);
-
-    Lapin *l1 = new Lapin(plateau.getCase(4, 4), regles);
-    plateau.getCase(4, 4)->ajouterAgent(l1);
-    agents.push_back(l1);
-    joueur.push_back(l1);
-
-    Lapin *l2 = new Lapin(plateau.getCase(4, 4), regles);
-    plateau.getCase(4, 4)->ajouterAgent(l2);
-    agents.push_back(l2);
-    joueur.push_back(l2);
-
-    // --- Rochers ---
-    Rocher *r1 = new Rocher(plateau.getCase(0, 1), regles);
-    plateau.getCase(0, 1)->ajouterAgent(r1);
-    agents.push_back(r1);
-
-    Rocher *r2 = new Rocher(plateau.getCase(0, 2), regles);
-    plateau.getCase(0, 2)->ajouterAgent(r2);
-    agents.push_back(r2);
-
-    // --- Mur ---
-    Mur *m = new Mur(plateau.getCase(1, 7), regles);
-    plateau.getCase(1, 7)->ajouterAgent(m);
-    agents.push_back(m);
-
-    // --- Eau ---
-    Eau *e = new Eau(plateau.getCase(1, 5), regles);
-    plateau.getCase(1, 5)->ajouterAgent(e);
-    agents.push_back(e);
-
+    spawnAgent<Lapin>(4, 4, true);
+    spawnAgent<Drapeau>(8, 4, false);
+    spawnAgent<Rocher>(1, 1, false);
+    spawnAgent<Rocher>(1, 2, false);
+    // pour faire une ligne de mur (plus simple)
+    for(int i=0; i<10; i++) {
+        spawnAgent<Mur>(1, 7+i, false);
+    }
+    spawnAgent<Eau>(1, 5, false);
+    spawnAgent<Rocher>(1, 1, false);
+    
     // BABA IS YOU
-    Mot *baba = new Mot(plateau.getCase(4, 5), Word::BABA, regles);
-    plateau.getCase(4, 5)->ajouterAgent(baba);
-    agents.push_back(baba);
-
-    Mot *is = new Mot(plateau.getCase(4, 6), Word::IS, regles);
-    plateau.getCase(4, 6)->ajouterAgent(is);
-    agents.push_back(is);
-
-    Mot *you = new Mot(plateau.getCase(4, 7), Word::YOU, regles);
-    plateau.getCase(4, 7)->ajouterAgent(you);
-    agents.push_back(you);
+    spawnMot(4, 5, Word::BABA);
+    spawnMot(4, 6, Word::IS);
+    spawnMot(4, 7, Word::YOU);
 
     // WALL IS STOP
-    Mot *wall = new Mot(plateau.getCase(7, 7), Word::WALL, regles);
-    plateau.getCase(7, 7)->ajouterAgent(wall);
-    agents.push_back(wall);
-
-    Mot *is2 = new Mot(plateau.getCase(7, 8), Word::IS, regles);
-    plateau.getCase(7, 8)->ajouterAgent(is2);
-    agents.push_back(is2);
-
-    Mot *stop = new Mot(plateau.getCase(7, 9), Word::STOP, regles);
-    plateau.getCase(7, 9)->ajouterAgent(stop);
-    agents.push_back(stop);
+    spawnMot(7, 7, Word::WALL);
+    spawnMot(7, 8, Word::IS);
+    spawnMot(7, 9, Word::STOP);
 
     // ROCK IS PUSH
-    Mot *rock = new Mot(plateau.getCase(10, 3), Word::ROCK, regles);
-    plateau.getCase(10, 3)->ajouterAgent(rock);
-    agents.push_back(rock);
+    spawnMot(10, 3, Word::ROCK);
+    spawnMot(10, 4, Word::IS);
+    spawnMot(10, 5, Word::PUSH);
 
-    Mot *is3 = new Mot(plateau.getCase(10, 4), Word::IS, regles);
-    plateau.getCase(10, 4)->ajouterAgent(is3);
-    agents.push_back(is3);
-
-    Mot *push = new Mot(plateau.getCase(10, 5), Word::PUSH, regles);
-    plateau.getCase(10, 5)->ajouterAgent(push);
-    agents.push_back(push);
+    // FLAG IS WIN
+    spawnMot(15, 3, Word::FLAG);
+    spawnMot(15, 4, Word::IS);
+    spawnMot(15, 5, Word::WIN);
 }
 
 bool Jeu::aDejaBouge(Agent *a)
@@ -151,8 +129,8 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
     {
         if (a->isStop() && !(a->isYou()))
         {
-            cout << "is STOP or NOT YOU" << endl;
-            cout << toString(a->getType()) << endl;
+            // cout << "is STOP or NOT YOU" << endl;
+            // cout << toString(a->getType()) << endl;
             return false;
         }
     }
@@ -161,14 +139,14 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
     {
         if (aDejaBouge(a))
         {
-            cout << "j'ai déja bougé" << endl;
+            // cout << "j'ai déja bougé" << endl;
             marqueCommeDemandeur(a);
         }
     }
 
     if (cible->getAgents().empty() || cible->ToutSuperposable())
     {
-        cout << "baba ou rien devant moi" << endl;
+        // cout << "baba ou rien devant moi" << endl;
         deplacerAgents(c, cible, agentjoueur);
         return true;
     }
@@ -177,7 +155,7 @@ bool Jeu::deplaceRec(pair<int, int> nv_direction, Case *c, Agent *agentjoueur)
 
     if (res)
     {
-        cout << "rec" << endl;
+        // cout << "rec" << endl;
         deplacerAgents(c, cible, agentjoueur);
         return true;
     }
@@ -196,15 +174,15 @@ void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
     {
         if (aDejaBouge(a))
         {
-            cout << "a deja bougé" << endl;
+            // cout << "a deja bougé" << endl;
             supprimerDeDemandeur(a);
             continue;
         }
 
         else if (!aDejaBouge(a) && !demandeuraDejaBouge() && a != demandeur)
         {
-            cout << toString(a->getType()) << endl;
-            cout << "je dois pas bouger car derriere il a déja bougé" << endl;
+            // cout << toString(a->getType()) << endl;
+            // cout << "je dois pas bouger car derriere il a déja bougé" << endl;
             continue;
         }
 
@@ -212,14 +190,18 @@ void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
         {
             aDeplacer.clear();
             aDeplacer.push_back(a);
-            cout << "you se deplace" << endl;
+            // cout << "you se deplace" << endl;
             break;
         }
 
         else if (a->isPush())
         {
-            cout << "is push se déplace" << endl;
+            // cout << "is push se déplace" << endl;
             aDeplacer.push_back(a);
+        }
+        else if (a->isWin())
+        {
+            closeWin = true;
         }
     }
 
@@ -244,7 +226,7 @@ void Jeu::deplace(Direction d)
         {
             continue;
         }
-        cout << "prochain lapin" << endl;
+        // cout << "prochain lapin" << endl;
         Case *courant = (*it)->getCaseActuelle();
         deplaceRec(nv_direction, courant, *it);
         demandeur.clear();
@@ -258,18 +240,104 @@ const Plateau &Jeu::getPlateau() const
     return plateau;
 }
 
-void Jeu::MajRegle() {
-    cout << "entrée dans majregle" << endl;
+void Jeu::MajRegle()
+{
+    // cout << "entrée dans majregle" << endl;
     regles = plateau.parseRegle();
     VerifJoueur();
 }
 
-void Jeu::VerifJoueur() {
+void Jeu::VerifJoueur()
+{
     joueur.clear();
-    for (Agent *a : agents){
-        if(a->isYou()) {
+    for (Agent *a : agents)
+    {
+        if (a->isYou())
+        {
             joueur.push_back(a);
         }
     }
 }
 
+vector<Agent *> Jeu::getAgents() const
+{
+    return agents;
+}
+
+Regles Jeu::getRule() const
+{
+    return regles;
+}
+
+void Jeu::sauvegarderEtat()
+{
+    cout << "sauvegarderEtat" << endl;
+    EtatJeu *j = new EtatJeu(*this);
+
+    undoStack.push_back(j);
+
+    for (EtatJeu *e : redoStack)
+        delete e;
+    redoStack.clear();
+}
+
+void Jeu::undo()
+{
+    if (undoStack.empty())
+    {
+        cout << "undo vide" << endl;
+        return;
+    }
+    else
+    {
+        cout << "undo pas vide" << endl;
+
+        EtatJeu *j = new EtatJeu(*this);
+        redoStack.push_back(j);
+
+        EtatJeu *prev = undoStack.back();
+        undoStack.pop_back();
+
+        restaurer(prev);
+        delete prev;
+    }
+}
+
+void Jeu::redo()
+{
+    if (redoStack.empty())
+    {
+        cout << "redo empty" << endl;
+        return;
+    }
+    else
+    {
+        cout << " redo je suis pas vide" << endl;
+        EtatJeu *j = new EtatJeu(*this);
+
+        undoStack.push_back(j);
+
+        EtatJeu *next = redoStack.back();
+        redoStack.pop_back();
+
+        restaurer(next);
+        delete next;
+    }
+}
+
+void Jeu::restaurer(const EtatJeu *etat)
+{
+    for (Agent *a : agents)
+        delete a;
+    agents.clear();
+
+    for (Agent *a : etat->agents)
+    {
+        agents.push_back(a->clone());
+    }
+    VerifJoueur();
+
+    plateau = Plateau(etat->plateau, agents);
+
+    regles = etat->regles;
+}
