@@ -21,18 +21,18 @@ Plateau::Plateau(int largeur, int longueur) : Largeur{largeur}, Longueur{longueu
     }
 }
 
-Plateau::Plateau(const Plateau &original, const std::vector<Agent *> &nouveauxAgents)
+Plateau::Plateau(const Plateau &original, const vector<Agent *> &nouveauxAgents)
     : Largeur(original.getLargeur()), Longueur(original.getLongueur())
 {
     for (int i = 0; i < Longueur; i++)
     {
-        std::vector<Case> ligne;
+        vector<Case> ligne;
         ligne.reserve(Largeur);
         for (int j = 0; j < Largeur; j++)
         {
             ligne.emplace_back(i, j);
         }
-        cases.push_back(std::move(ligne));
+        cases.push_back(move(ligne));
     }
 
     for (Agent *a : nouveauxAgents)
@@ -42,20 +42,6 @@ Plateau::Plateau(const Plateau &original, const std::vector<Agent *> &nouveauxAg
         cases[x][y].ajouterAgent(a);
     }
 }
-
-// Plateau::Plateau(const Plateau &original, const std::vector<Agent *> &nouveauxAgents)
-//     : Largeur(original.Largeur), Longueur(original.Longueur)
-// {
-//     // Copier les cases
-//     cases.resize(Largeur);
-//     for (int i = 0; i < Largeur; ++i) {
-//         cases[i].resize(Longueur);
-//         for (int j = 0; j < Longueur; ++j) {
-//             cases[i][j] = original.cases[i][j]; // copie des Case (si Case est copiable)
-//             cases[i][j].setAgents(nouveauxAgents); // remplace les agents par les nouveaux clones
-//         }
-//     }
-// }
 
 const Plateau &Plateau::operator=(const Plateau &other)
 {
@@ -152,52 +138,3 @@ Regles Plateau::parseRegle() const
     }
     return regles;
 }
-
-
-// void Plateau::VerifRule(const WordInfo& m_info, const Case *c, Regles &regles) const
-// {
-//     int i = c->getX();
-//     int j = c->getY();
-//     Mot *operator1 = BonMotPresent(i, j + 1, true);
-//     Mot *propriete1 = BonMotPresent(i, j + 2, false);
-//     Mot *operator2 = BonMotPresent(i + 1, j, true);
-//     Mot *propriete2 = BonMotPresent(i + 2, j, false);
-//     if (operator1 != nullptr && propriete1 != nullptr)
-//     {
-//         const Word w = propriete1->getWord();
-//         const WordInfo w1 = getWordInfo(w);
-//         regles.addRule(m_info.object, w1.property);
-//         regles.addRule(ObjectType::TEXT, Property::PUSH);
-//     }
-//     if (operator2 != nullptr && propriete2)
-//     {
-//         const Word w = propriete2->getWord();
-//         const WordInfo w1 = getWordInfo(w);
-//         regles.addRule(m_info.object, w1.property);
-//         regles.addRule(ObjectType::TEXT, Property::PUSH);
-//     }
-// }
-
-// Mot *Plateau::BonMotPresent(int i, int j, bool veutOperator) const
-// {
-//     /**
-//      * pas besoin de vérifier j car la boucle va jusqu'à largeur-2
-//      */
-//     if(i < getLongueur()){
-//         const Case *c = getCase(i, j);
-//         for (Agent *a : c->getAgents())
-//         {
-//             if (a->getType() == ObjectType::TEXT)
-//             {
-//                 Mot *m = dynamic_cast<Mot *>(a);
-//                 if (m->isOperator() && veutOperator)
-//                 {
-//                     return m;
-//                 }else if(m->isProperty()) {
-//                     return m;
-//                 }
-//             }
-//         }
-//     }
-//     return nullptr;
-// }

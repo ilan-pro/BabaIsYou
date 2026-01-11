@@ -36,20 +36,6 @@ bool Regles::has(Property prop, ObjectType obj) const
 
     const vector<ObjectType> &v = it->second;
 
-    /*
-    j'ai essayé de le faire avec un itérator vu qu'on a vu ca dans le cours 8
-    ça revient a la meme chose bref on gardera soit le premier ou le 2eme mais
-    c'était cool de mieux comprendre comment marche les itérators
-    */
-
-    // for (vector<ObjectType>::const_iterator it = v.begin(); it != v.end(); it++)
-    // {
-    //     if (*it == obj)
-    //     {
-    //         return true;
-    //     }
-    // }
-
     for (size_t i = 0; i < v.size(); i++)
     {
         if (v[i] == obj)
@@ -67,16 +53,6 @@ const vector<ObjectType> &Regles::get(Property prop) const
 
     if (it == regles.end())
     {
-
-        /*
-        Si la clé n'existe pas , je souhaite retouner un vector vide
-        si ce n'est pas static, mon vector n'existe plus apres l'execution de cette fonction
-        c'est mieux de faire ca car sinon on doit manipuler des pointeurs null
-        et dans le sujet du projet justement il ne souhaite pas qu on le fasse
-        et donc on aura juste a tester si le vector est vide pour savoir si la clé existe ou nn
-        et donc si il y a des obj qui cette propriété.
-        */
-
         static const vector<ObjectType> empty;
         return empty;
     }

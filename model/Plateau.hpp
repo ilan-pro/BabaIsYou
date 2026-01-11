@@ -22,8 +22,10 @@ private:
      *
      * Et ducoup const int largeur et longeur suffit a limité la taille
      */
-
+    friend class Jeu;
+    friend class EtatJeu;
     vector<vector<Case>> cases;
+    const Plateau &operator=(const Plateau &x);
 
 public:
     /* Voir quoi faire pour les copies de vecteurs */
@@ -47,8 +49,6 @@ public:
     Plateau(const Plateau &plateau) = delete;
     // const Plateau &operator=(const Plateau &x) = delete;
 
-    const Plateau &operator=(const Plateau &x);
-
     vector<Agent *> getAllAgents();
     /**
      * Ici on utilise un getter constant et pas un using class PlateauTerm; car cela casserait l'encapsulation
@@ -58,8 +58,6 @@ public:
     Case &getCase(const Agent &a) const;
 
     Regles parseRegle() const; 
-    // void VerifRule(const WordInfo& m_info, const Case *c, Regles &regles) const;
-    // Mot* BonMotPresent(int i, int j, bool veutOperator) const;
 };
 
 #endif

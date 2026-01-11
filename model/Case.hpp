@@ -31,7 +31,6 @@ public:
 
     int getX() const;
     int getY() const;
-    // bool containBaba_only() const;
     /* vérifie qu'on à des éléments superposable comme l'eau OU si y a un BABA*/
     bool ToutSuperposable() const;
 

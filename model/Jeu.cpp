@@ -11,6 +11,7 @@
 Jeu::Jeu() : plateau(27, 22), closeWin{false} 
 {
     initTestMap();
+    // initMap1();
     regles.print();
 }
 
@@ -67,7 +68,6 @@ void Jeu::initTestMap()
         spawnAgent<Mur>(1, 7+i, false);
     }
     spawnAgent<Eau>(1, 5, false);
-    spawnAgent<Rocher>(1, 1, false);
     
     // BABA IS YOU
     spawnMot(4, 5, Word::BABA);
@@ -88,6 +88,41 @@ void Jeu::initTestMap()
     spawnMot(15, 3, Word::FLAG);
     spawnMot(15, 4, Word::IS);
     spawnMot(15, 5, Word::WIN);
+}
+
+void Jeu::initMap1()
+{
+    spawnAgent<Lapin>(7, 4, true);
+    spawnAgent<Drapeau>(7, 11, false);
+    spawnAgent<Rocher>(6, 8, false);
+    spawnAgent<Rocher>(7, 8, false);
+    spawnAgent<Rocher>(8, 8, false);
+    for(int i=0; i<11; i++) {
+        spawnAgent<Mur>(5, 4+i, false);
+    }
+    for(int i=0; i<11; i++) {
+        spawnAgent<Mur>(9, 4+i, false);
+    }
+    
+    // BABA IS YOU
+    spawnMot(2, 4, Word::BABA);
+    spawnMot(2, 5, Word::IS);
+    spawnMot(2, 6, Word::YOU);
+
+    // FLAG IS WIN
+    spawnMot(2, 12, Word::FLAG);
+    spawnMot(2, 13, Word::IS);
+    spawnMot(2, 14, Word::WIN);
+
+    // WALL IS STOP
+    spawnMot(11, 4, Word::WALL);
+    spawnMot(11, 5, Word::IS);
+    spawnMot(11, 6, Word::STOP);
+
+    // ROCK IS PUSH
+    spawnMot(11, 12, Word::ROCK);
+    spawnMot(11, 13, Word::IS);
+    spawnMot(11, 14, Word::PUSH);
 }
 
 bool Jeu::aDejaBouge(Agent *a)
@@ -184,6 +219,10 @@ void Jeu::deplacerAgents(Case *src, Case *dst, Agent *demandeur)
             // cout << toString(a->getType()) << endl;
             // cout << "je dois pas bouger car derriere il a déja bougé" << endl;
             continue;
+        }
+
+        else if(a->isYou() && a->isWin()) {
+            closeWin = true;
         }
 
         else if ((a->isYou() && a == demandeur))
